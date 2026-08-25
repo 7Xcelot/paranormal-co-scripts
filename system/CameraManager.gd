@@ -72,7 +72,7 @@ func _process(delta):
 
 func switch_to_camera_by_id(cam_id: String) -> void:
 	if not camera_lookup.has(cam_id):
-		push_warning("CameraManager: ไม่พบกล้องชื่อ '%s'" % cam_id)
+		push_warning("CameraManager: Camera Not Found '%s'" % cam_id)
 		return
 
 	if camera_lookup.has(current_camera_id):
@@ -80,8 +80,9 @@ func switch_to_camera_by_id(cam_id: String) -> void:
 
 	current_camera_id = cam_id
 	var new_cam = camera_lookup[cam_id]
+	target_rotations[new_cam] = base_rotations[new_cam]
+	new_cam.rotation.y = base_rotations[new_cam]
 	new_cam.current = true
-
 	camera_switched.emit(cam_id, new_cam)
 
 
