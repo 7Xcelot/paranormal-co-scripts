@@ -28,8 +28,8 @@ func _ready() -> void:
 	anomaly_triggered.connect(_on_self_anomaly_triggered)
 	anomaly_reverted.connect(_on_self_anomaly_reverted)
 	_set_visual_state(true)
-	input_ray_pickable = true
-	input_event.connect(_on_input_event)
+	# input_ray_pickable = true
+	# input_event.connect(_on_input_event)
 	SpawnManager.waiting_turn_granted.connect(_on_waiting_turn_granted)
 	SpawnManager.request_waiting_turn(self)
 
@@ -46,10 +46,10 @@ func _process(delta: float) -> void:
 	if _timer >= _timer_duration:
 		_on_timer_finished()
 
-func _on_input_event(_camera: Node, event: InputEvent, _pos: Vector3, _normal: Vector3, _shape_idx: int) -> void:
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		if try_report():
-			print("Report สำเร็จ: %s" % entity_id)
+#func _on_input_event(_camera: Node, event: InputEvent, _pos: Vector3, _normal: Vector3, _shape_idx: int) -> void:
+#	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+#		if try_report():
+#			print("Report สำเร็จ: %s" % entity_id)
 
 func _enter_waiting() -> void:
 	current_state = State.WAITING
