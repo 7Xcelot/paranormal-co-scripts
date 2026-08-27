@@ -2,7 +2,7 @@ extends Node
 
 const REPORT_HOLD_DURATION: float = 2.4
 const REPORT_COOLDOWN: float = 1.5
-const MOVE_CANCEL_THRESHOLD_PX: float = 9.0
+const MOVE_CANCEL_THRESHOLD_PX: float = 10.4
 const RAY_LENGTH: float = 1000.0
 const BAR_FADE_DURATION: float = 1.0
 

@@ -4,6 +4,7 @@ class_name CameraManager
 @export var pan_speed: float = 2.0
 @export var smooth_factor: float = 10.0
 @export var pan_limit_degrees: float = 20.0
+@export var visibility_config: LevelVisibilityConfig
 
 signal camera_switched(camera_id: String, camera: Camera3D)
 

@@ -1,5 +1,4 @@
 extends Node
-# Autoload: ตั้งชื่อ "SpawnManager"
 
 const OBJ_ANO_MAX_CAPACITY: int = 6  # คงที่ทุก Level ตามเอกสาร
 
@@ -61,33 +60,3 @@ func release_waiting_turn(entity: Node) -> void:
 		var next_entity: Node = _waiting_queue.pop_front()
 		_current_waiter = next_entity
 		waiting_turn_granted.emit(next_entity)
-
-# ---------- Ene.Ano ----------
-
-func request_ene_ano_spawn() -> String:
-	# คืนชื่อ entity ที่เลือกได้ หรือ "" ถ้า spawn ไม่ได้ (เต็ม capacity หรือ whitelist ว่าง)
-	if active_ene_ano_ids.size() >= ene_ano_capacity:
-		return ""
-
-	var available: Array = ene_ano_whitelist.filter(func(id): return id not in active_ene_ano_ids)
-	if available.is_empty():
-		return "" # ผู้เรียกต้อง sleep เองเมื่อได้ค่านี้กลับไป
-
-	var chosen: String = available[randi() % available.size()]
-	active_ene_ano_ids.append(chosen)
-	ene_ano_pool_updated.emit()
-	return chosen
-
-
-func register_ene_ano_despawned(entity_name: String) -> void:
-	active_ene_ano_ids.erase(entity_name)
-	ene_ano_pool_updated.emit()
-
-
-func get_active_ene_ano_count() -> int:
-	return active_ene_ano_ids.size()
-
-
-func reset() -> void:
-	active_obj_ano_count = 0
-	active_ene_ano_ids.clear()
