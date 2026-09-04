@@ -34,7 +34,7 @@ func load_level_config(new_level_id: int, whitelist: Array[String], new_capacity
 	_active_instances.clear()
 	_stage = SpawnStage.SLEEPING
 	_has_woken = false
-	set_process(false)
+	set_process(true)  # แก้: เดิมเป็น false แล้วไม่มีใครเปิดกลับมาเลย ทำให้ _process() ไม่ทำงานเลยทั้งเกม
 	print("EneAnoSpawnManager: Level Load %d (whitelist: %s, capacity: %d)" % [level_id, ene_ano_whitelist, ene_ano_capacity])
 
 func _process(delta: float) -> void:
@@ -110,6 +110,13 @@ func _do_spawn(entity_key: String) -> void:
 	instance.returned_to_pool.connect(_on_instance_returned.bind(entity_key))
 	instance.activate()
 	ene_ano_spawned.emit(instance)
+	# เพิ่มใหม่ — log สไตล์เดียวกับ ObjAno เพื่อ debug ว่าระบบทำงานอยู่
+	print("[Sec %d] EneAno Spawn: %s | Active %d/%d" % [
+		GlobalTimeManager.get_current_second(),
+		entity_key,
+		active_ene_ano_ids.size(),
+		ene_ano_capacity
+	])
 
 func _on_instance_returned(entity_key: String) -> void:
 	var instance: EneAno = _active_instances.get(entity_key)
