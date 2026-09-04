@@ -3,39 +3,28 @@ extends Node
 const OBJ_ANO_MAX_CAPACITY: int = 6  # คงที่ทุก Level ตามเอกสาร
 
 signal obj_ano_sleep_changed(is_sleeping: bool)
-signal ene_ano_pool_updated()
 signal waiting_turn_granted(entity: Node)
 
 var level_id: int = 0
-var ene_ano_whitelist: Array[String] = []
-var ene_ano_capacity: int = 0
-
 var active_obj_ano_count: int = 0
-var active_ene_ano_ids: Array[String] = []  # ชื่อเอนทิตี้ที่ active อยู่ตอนนี้ กันเลือกซ้ำ
 
 var _waiting_queue: Array = []
 var _current_waiter: Node = null
 
-func load_level_config(new_level_id: int, whitelist: Array[String], new_ene_ano_capacity: int) -> void:
+func load_level_config(new_level_id: int) -> void:
 	level_id = new_level_id
-	ene_ano_whitelist = whitelist.duplicate()
-	ene_ano_capacity = new_ene_ano_capacity
 	active_obj_ano_count = 0
-	active_ene_ano_ids.clear()
-	print("SpawnManager: Level Load %d (Ene.Ano whitelist: %s, capacity: %d)" % [level_id, ene_ano_whitelist, ene_ano_capacity])
-
+	print("ObjAnoSpawnManager: Level Load %d" % level_id)
 
 # ---------- Obj.Ano ----------
 
 func can_spawn_obj_ano() -> bool:
 	return active_obj_ano_count < OBJ_ANO_MAX_CAPACITY
 
-
 func register_obj_ano_spawned() -> void:
 	active_obj_ano_count += 1
 	if active_obj_ano_count >= OBJ_ANO_MAX_CAPACITY:
 		obj_ano_sleep_changed.emit(true)
-
 
 func register_obj_ano_reported() -> void:
 	var was_full := active_obj_ano_count >= OBJ_ANO_MAX_CAPACITY

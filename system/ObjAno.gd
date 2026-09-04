@@ -30,8 +30,8 @@ func _ready() -> void:
 	_set_visual_state(true)
 	# input_ray_pickable = true
 	# input_event.connect(_on_input_event)
-	SpawnManager.waiting_turn_granted.connect(_on_waiting_turn_granted)
-	SpawnManager.request_waiting_turn(self)
+	ObjAnoSpawnManager.waiting_turn_granted.connect(_on_waiting_turn_granted)
+	ObjAnoSpawnManager.request_waiting_turn(self)
 
 func _on_waiting_turn_granted(entity: Node) -> void:
 	if entity == self:
@@ -62,38 +62,38 @@ func _enter_spawning() -> void:
 	_timer = 0.0
 	_timer_duration = randf_range(2.0, 10.0)
 	state_changed.emit(current_state)
-	SpawnManager.release_waiting_turn(self)
+	ObjAnoSpawnManager.release_waiting_turn(self)
 
 func _try_enter_anomaly() -> void:
-	if SpawnManager.can_spawn_obj_ano():
+	if ObjAnoSpawnManager.can_spawn_obj_ano():
 		_enter_anomaly()
 	else:
 		current_state = State.HOLDING
 		state_changed.emit(current_state)
-		if not SpawnManager.obj_ano_sleep_changed.is_connected(_on_sleep_changed):
-			SpawnManager.obj_ano_sleep_changed.connect(_on_sleep_changed)
+		if not ObjAnoSpawnManager.obj_ano_sleep_changed.is_connected(_on_sleep_changed):
+			ObjAnoSpawnManager.obj_ano_sleep_changed.connect(_on_sleep_changed)
 
 func _on_sleep_changed(sleeping: bool) -> void:
 	if current_state == State.HOLDING and not sleeping:
-		if SpawnManager.can_spawn_obj_ano():
-			SpawnManager.obj_ano_sleep_changed.disconnect(_on_sleep_changed)
+		if ObjAnoSpawnManager.can_spawn_obj_ano():
+			ObjAnoSpawnManager.obj_ano_sleep_changed.disconnect(_on_sleep_changed)
 			_enter_anomaly()
 
 func _enter_anomaly() -> void:
-	SpawnManager.register_obj_ano_spawned()
+	ObjAnoSpawnManager.register_obj_ano_spawned()
 	current_state = State.ANOMALY
 	state_changed.emit(current_state)
 	anomaly_triggered.emit(entity_id)
 	print("[Sec %d] Anomaly Spawn: %s | Slot %d/%d" % [
 		GlobalTimeManager.get_current_second(),
 		entity_id,
-		SpawnManager.OBJ_ANO_MAX_CAPACITY - SpawnManager.active_obj_ano_count,
-		SpawnManager.OBJ_ANO_MAX_CAPACITY
+		ObjAnoSpawnManager.OBJ_ANO_MAX_CAPACITY - ObjAnoSpawnManager.active_obj_ano_count,
+		ObjAnoSpawnManager.OBJ_ANO_MAX_CAPACITY
 	])
 
 func _enter_cooldown(reported: bool) -> void:
 	if reported:
-		SpawnManager.register_obj_ano_reported()
+		ObjAnoSpawnManager.register_obj_ano_reported()
 		ReportManager.report("obj_ano", entity_id, score_value)
 	anomaly_reverted.emit(entity_id)
 	current_state = State.COOLDOWN
@@ -117,7 +117,7 @@ func _on_timer_finished() -> void:
 			_try_enter_anomaly()
 		State.COOLDOWN:
 			current_state = State.QUEUED
-			SpawnManager.request_waiting_turn(self)
+			ObjAnoSpawnManager.request_waiting_turn(self)
 
 func try_report() -> bool:
 	if current_state == State.ANOMALY:
