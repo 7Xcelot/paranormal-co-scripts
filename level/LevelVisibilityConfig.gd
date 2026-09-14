@@ -9,3 +9,11 @@ class_name LevelVisibilityConfig
 func can_see(camera_id: String, target_id: String) -> bool:
 	var visible_targets: Array = visibility_map.get(camera_id, [])
 	return target_id in visible_targets
+
+## หา camera_id ทั้งหมดที่มองเห็น target_id นี้ได้ (อาจมีมากกว่า 1 กล้อง)
+func get_cameras_that_see(target_id: String) -> Array[String]:
+	var result: Array[String] = []
+	for camera_id in visibility_map.keys():
+		if target_id in visibility_map[camera_id]:
+			result.append(camera_id)
+	return result

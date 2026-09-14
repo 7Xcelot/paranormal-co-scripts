@@ -3,10 +3,13 @@ class_name CameraManager
 
 @export var pan_speed: float = 2.0
 @export var smooth_factor: float = 10.0
-@export var pan_limit_degrees: float = 20.0
+@export var pan_limit_degrees: float = 11.5
+@export var camera_fov: float = 47.5
 @export var visibility_config: LevelVisibilityConfig
 
 signal camera_switched(camera_id: String, camera: Camera3D)
+signal alert_started(target_id: String)
+signal alert_stopped(target_id: String)
 
 var pan_limit: float
 var cameras: Array[Camera3D] = []
@@ -21,6 +24,8 @@ func _ready():
 
 	for child in get_children():
 		if child is Camera3D:
+			child.fov = camera_fov
+			
 			cameras.append(child)
 			base_rotations[child] = child.rotation.y
 			target_rotations[child] = child.rotation.y
