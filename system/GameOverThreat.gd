@@ -98,6 +98,6 @@ func _set_alert(active: bool) -> void:
 	if cam_manager == null:
 		return
 	if active:
-		cam_manager.alert_started.emit(target_id)
+		cam_manager.notify_alert_started(target_id)
 	else:
-		cam_manager.alert_stopped.emit(target_id)
+		cam_manager.notify_alert_stopped(target_id)

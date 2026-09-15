@@ -18,7 +18,6 @@ var base_rotations: Dictionary = {}
 var target_rotations: Dictionary = {}
 var current_camera_id: String = ""
 
-
 func _ready():
 	pan_limit = deg_to_rad(pan_limit_degrees)
 
@@ -40,13 +39,11 @@ func _ready():
 	else:
 		push_warning("CameraManager: ไม่พบ Camera3D ในฉากนี้เลย")
 
-
 func _extract_id(node_name: String) -> String:
 	var regex = RegEx.new()
 	regex.compile("\\d+$") # จับตัวเลขท้ายสตริง
 	var result = regex.search(node_name)
 	return result.get_string() if result else node_name
-
 
 func _process(delta):
 	if cameras.is_empty() or not camera_lookup.has(current_camera_id):
@@ -75,7 +72,6 @@ func _process(delta):
 		1.0 - exp(-smooth_factor * delta)
 	)
 
-
 func switch_to_camera_by_id(cam_id: String) -> void:
 	if not camera_lookup.has(cam_id):
 		push_warning("CameraManager: Camera Not Found '%s'" % cam_id)
@@ -91,10 +87,14 @@ func switch_to_camera_by_id(cam_id: String) -> void:
 	new_cam.current = true
 	camera_switched.emit(cam_id, new_cam)
 
-
 func get_current_camera() -> Camera3D:
 	return camera_lookup.get(current_camera_id, null)
 
-
 func get_all_camera_ids() -> Array:
 	return camera_lookup.keys()
+
+func notify_alert_started(target_id: String) -> void:
+	alert_started.emit(target_id)
+
+func notify_alert_stopped(target_id: String) -> void:
+	alert_stopped.emit(target_id)

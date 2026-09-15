@@ -84,7 +84,7 @@ func _on_threat_resolved(_t) -> void:
 	_return_to_pool()
 
 func _on_threat_expired(_t) -> void:
-	pass
+	GameOverManager.trigger_game_over()
 
 func try_report() -> bool:
 	match stage:
@@ -96,6 +96,9 @@ func try_report() -> bool:
 		_:
 			return false
 
+func get_threat() -> GameOverThreat:
+	return _threat
+
 func get_report_hold_duration() -> float:
 	return _threat.get_report_hold_duration() if _threat else 2.4
 
@@ -103,6 +106,6 @@ func _return_to_pool() -> void:
 	if _threat:
 		_threat.queue_free()
 		_threat = null
-		set_process(false)
-		stage = Stage.INACTIVE
-		returned_to_pool.emit(self)
+	set_process(false)
+	stage = Stage.INACTIVE
+	returned_to_pool.emit(self)
