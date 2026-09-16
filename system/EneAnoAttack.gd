@@ -1,4 +1,4 @@
-extends Node3D
+extends Area3D
 class_name EneAnoA
 
 signal stage_changed(instance: Node3D, new_stage: int)
@@ -6,6 +6,7 @@ signal returned_to_pool(instance: Node3D)
 
 enum Stage { INACTIVE, STAGE_1, STAGE_2, STAGE_3, COOLDOWN }
 
+@export var animation_player: AnimationPlayer
 @export var enemy_name: String = ""
 @export var stage_1_duration: float = 40.0
 @export var stage_2_duration: float = 35.0
@@ -20,11 +21,13 @@ enum Stage { INACTIVE, STAGE_1, STAGE_2, STAGE_3, COOLDOWN }
 @export var report_window_duration: float = 6.0
 @export var report_hold_multiplier: float = 1.5
 
+var _original_collision_layer: int = 0
 var stage: Stage = Stage.INACTIVE
 var _timer: float = 0.0
 var _threat: GameOverThreat
 
 func _ready() -> void:
+	_original_collision_layer = collision_layer
 	_enter_stage(Stage.STAGE_1)
 	set_process(true)
 
@@ -54,6 +57,8 @@ func _enter_stage(new_stage: Stage) -> void:
 	match new_stage:
 		Stage.STAGE_1:
 			_teleport_to(node_point_stage_1)
+			visible = true
+			collision_layer = _original_collision_layer
 			_timer = stage_1_duration
 		Stage.STAGE_2:
 			_teleport_to(node_point_stage_2)
@@ -62,7 +67,10 @@ func _enter_stage(new_stage: Stage) -> void:
 			_teleport_to(node_point_stage_3)
 			_start_threat()
 		Stage.COOLDOWN:
+			visible = false
+			collision_layer = 0
 			_timer = cooldown_duration
+	_play_stage_animation(new_stage)
 	stage_changed.emit(self, new_stage)
 
 func _teleport_to(point: Node3D) -> void:
@@ -109,3 +117,10 @@ func _return_to_pool() -> void:
 	set_process(false)
 	stage = Stage.INACTIVE
 	returned_to_pool.emit(self)
+
+func _play_stage_animation(new_stage: Stage) -> void:
+	if animation_player == null:
+		return
+	var clip_name := "stage_%d" % [new_stage] if new_stage in [Stage.STAGE_1, Stage.STAGE_2, Stage.STAGE_3] else  ""
+	if clip_name != "" and animation_player.has_animation(clip_name):
+		animation_player.play(clip_name)

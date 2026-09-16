@@ -42,6 +42,7 @@ func _process(delta: float) -> void:
 func _update_hold(delta: float) -> void:
 	var camera_display := get_tree().get_first_node_in_group("camera_display")
 	if camera_display == null:
+		print("ReportController: camera_display group ไม่เจอเลย")
 		_reset_hold()
 		return
 
@@ -57,17 +58,23 @@ func _update_hold(delta: float) -> void:
 			is_holding = true
 			hold_time = 0.0
 			anchor_pos = local_pos
+			print("ReportController: เริ่ม hold ที่ %s (display size=%s)" % [local_pos, camera_display.size])
+		elif mouse_down and not inside_display:
+			print("ReportController: กดเมาส์แต่อยู่นอก display — local_pos=%s size=%s" % [local_pos, camera_display.size])
 		return
 
 	if not mouse_down or not inside_display:
+		print("ReportController: hold ถูกยกเลิก (mouse_down=%s inside=%s)" % [mouse_down, inside_display])
 		_reset_hold()
 		return
 	if local_pos.distance_to(anchor_pos) > MOVE_CANCEL_THRESHOLD_PX:
+		print("ReportController: hold ถูกยกเลิกเพราะขยับเมาส์เกิน threshold")
 		_reset_hold()
 		return
 
 	hold_time += delta
 	if hold_time >= REPORT_HOLD_DURATION:
+		print("ReportController: hold ครบแล้ว กำลัง raycast...")
 		_attempt_report(camera_display)
 		action_cooldown = REPORT_COOLDOWN
 		_reset_hold()
@@ -75,9 +82,11 @@ func _update_hold(delta: float) -> void:
 func _attempt_report(camera_display: Control) -> void:
 	var camera_manager := get_tree().get_first_node_in_group("camera_manager")
 	if camera_manager == null:
+		print("ReportController: camera_manager group ไม่เจอ")
 		return
 	var cam: Camera3D = camera_manager.get_current_camera()
 	if cam == null:
+		print("ReportController: get_current_camera() คืน null")
 		return
 
 	var camera_viewport: Viewport = camera_manager.get_viewport()
@@ -92,11 +101,18 @@ func _attempt_report(camera_display: Control) -> void:
 	query.collide_with_areas = true
 	var result := space_state.intersect_ray(query)
 
+	print("ReportController: raycast from=%s to=%s viewport_pos=%s result=%s" % [from, to, viewport_pos, result])
+
 	if result.is_empty():
+		print("ReportController: raycast ไม่โดนอะไรเลย")
 		return
 	var collider: Node = result.get("collider")
+	print("ReportController: โดน collider = %s (%s)" % [collider.name, collider])
 	if collider and collider.has_method("try_report"):
-		collider.try_report()
+		var ok : bool = collider.try_report()
+		print("ReportController: try_report() คืนค่า %s" % ok)
+	else:
+		print("ReportController: collider ไม่มี try_report() เลย")
 
 func _reset_hold() -> void:
 	is_holding = false

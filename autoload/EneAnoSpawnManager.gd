@@ -7,6 +7,7 @@ extends Node
 
 signal ene_ano_spawned(instance)
 signal ene_ano_returned(entity_name: String)
+signal any_stage2_reached
 
 enum SpawnStage { SLEEPING, CHECK, SELECTIVE, TIME_AND_COOLDOWN }
 
@@ -110,6 +111,7 @@ func _do_spawn(entity_key: String) -> void:
 		return
 	_active_instances[entity_key] = instance
 	instance.returned_to_pool.connect(_on_instance_returned.bind(entity_key))
+	instance.stage_changed.connect(_on_watched_stage_changed)
 	instance.activate()
 	ene_ano_spawned.emit(instance)
 	print("[Sec %d] EneAno Spawn: %s | Active %d/%d" % [
@@ -119,7 +121,7 @@ func _do_spawn(entity_key: String) -> void:
 		ene_ano_capacity
 	])
 
-func _on_instance_returned(entity_key: String) -> void:
+func _on_instance_returned(_instance, entity_key: String) -> void:
 	var instance = _active_instances.get(entity_key)
 	if instance:
 		instance.queue_free()
@@ -140,3 +142,7 @@ func reset() -> void:
 
 func get_active_instances() -> Dictionary:
 	return _active_instances.duplicate()
+
+func _on_watched_stage_changed(_instance, new_stage: int) -> void:
+	if new_stage == 2:
+		any_stage2_reached.emit()

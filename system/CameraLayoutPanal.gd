@@ -52,22 +52,29 @@ func _process(delta: float) -> void:
 ## เรียกอัตโนมัติจาก camera_manager.alert_started — ไม่ต้องเรียกเองจากที่อื่น
 func start_alert(target_id: String) -> void:
 	if camera_manager.visibility_config == null:
+		push_warning("CameraLayoutPanel: visibility_config ยังไม่ได้ผูกใน CameraManager")
 		return
-	for cam_id in camera_manager.visibility_config.get_cameras_that_see(target_id):
+	var cams: Array[String] = camera_manager.visibility_config.get_cameras_that_see(target_id)
+	if cams.is_empty():
+		push_warning("CameraLayoutPanel: ไม่มีกล้องไหนเห็น target_id '%s' เลยใน visibility_map (พิมพ์ผิด/ลืมเพิ่ม entry?)" % target_id)
+	for cam_id in cams:
+		if not buttons.has(cam_id):
+			push_warning("CameraLayoutPanel: เจอ cam_id '%s' ใน visibility_map แต่ไม่มีปุ่มนี้ใน buttons dict" % cam_id)
 		_alert_ids[cam_id] = true
 	_blink_timer = 0.0
 	_blink_on = true
 	for id in _alert_ids.keys():
 		_apply_alert_visual(id, true)
 	set_process(true)
+	print("CameraLayoutPanel: start_alert ok — alert_ids = %s" % _alert_ids.keys())
 
-## เรียกอัตโนมัติจาก camera_manager.alert_stopped
 func stop_alert(target_id: String) -> void:
 	if camera_manager.visibility_config == null:
 		return
 	for cam_id in camera_manager.visibility_config.get_cameras_that_see(target_id):
 		_alert_ids.erase(cam_id)
 		_apply_alert_visual(cam_id, false)
+	print("CameraLayoutPanel: stop_alert ok — alert_ids เหลือ = %s" % _alert_ids.keys())
 
 func _apply_alert_visual(cam_id: String, on: bool) -> void:
 	var btn: Button = buttons.get(cam_id)
