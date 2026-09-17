@@ -6,7 +6,7 @@ class_name HunterPath
 @export var staring_points: Array[Marker3D] = []
 
 @export var hunting_final_point: Marker3D
-@export var hunting_path_1: Array[Marker3D] = []
+@export var hunting_path_1: Array[Marker3D] = [] # [X-spawn, จุดที่ 2, จุดที่ 3] — 3 markers/เส้นทาง
 @export var hunting_path_2: Array[Marker3D] = []
 @export var hunting_path_3: Array[Marker3D] = []
 

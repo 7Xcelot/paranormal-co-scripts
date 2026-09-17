@@ -88,6 +88,10 @@ func _attempt_report(camera_display: Control) -> void:
 	if cam == null:
 		print("ReportController: get_current_camera() คืน null")
 		return
+	
+	if EncounterManager.active_encounter != null:
+		EncounterManager.active_encounter.try_report()
+		return
 
 	var camera_viewport: Viewport = camera_manager.get_viewport()
 	var scale_factor: Vector2 = Vector2(camera_viewport.size) / camera_display.size

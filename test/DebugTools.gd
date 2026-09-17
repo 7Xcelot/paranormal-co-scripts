@@ -25,6 +25,9 @@ func _ready() -> void:
 		return
 	EneAnoSpawnManager.ene_ano_spawned.connect(_on_ene_ano_spawned)
 	EneAnoSpawnManager.ene_ano_returned.connect(_on_ene_ano_returned)
+	EncounterManager.encounter_triggered.connect(_on_encounter_triggered)
+	GlobalTimeManager.encounter_window_started.connect(_on_encounter_window_started)
+	GlobalTimeManager.encounter_window_ended.connect(_on_encounter_window_ended)
 	print("DebugTools: เปิดใช้งาน (debug build เท่านั้น) — กด F1 เพื่อดูปุ่มทั้งหมด")
 
 func _unhandled_key_input(event: InputEvent) -> void:
@@ -191,9 +194,26 @@ func _print_instance_markers(instance, label: String) -> void:
 	])
 
 # ============================================================
-# [Alert]
+# [Encounter] — ทำงานตลอด ไม่มี toggle
 # ============================================================
+const ENCOUNTER_STATE_NAMES = ["INACTIVE", "WAITING", "ACTIVE", "RESOLVED", "EXPIRED", "DESPAWNED"]
 
+func _on_encounter_window_started() -> void:
+	print("DebugTools[Encounter]: เข้าสู่ Phase 4 (Encounter Window) แล้ว t=%.0fs" % GlobalTimeManager.elapsed_time)
+
+func _on_encounter_window_ended() -> void:
+	print("DebugTools[Encounter]: ออกจาก Phase 4 (Encounter Window) แล้ว t=%.0fs" % GlobalTimeManager.elapsed_time)
+
+func _on_encounter_triggered(encounter: Encounter) -> void:
+	print("DebugTools[Encounter]: ปรากฏแล้ว! รออยู่ที่ Cam%s — ไปกล้องนั้นเพื่อ Activate ภายใน %.0fs" % [
+		encounter.cam_id, encounter.waiting_duration
+	])
+	encounter.state_changed.connect(_on_encounter_state_changed.bind(encounter))
+
+func _on_encounter_state_changed(new_state: int, encounter: Encounter) -> void:
+	print("DebugTools[Encounter]: state=%s  cam=%s  t=%.0fs" % [
+		ENCOUNTER_STATE_NAMES[new_state], encounter.cam_id, GlobalTimeManager.elapsed_time
+	])
 
 # ============================================================
 # [Help]

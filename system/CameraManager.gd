@@ -17,6 +17,8 @@ var camera_lookup: Dictionary = {}      # { "1": Camera3D, "2": Camera3D, "3": C
 var base_rotations: Dictionary = {}
 var target_rotations: Dictionary = {}
 var current_camera_id: String = ""
+var _blackout_timers: Dictionary = {}
+var _locked: bool = false
 
 func _ready():
 	pan_limit = deg_to_rad(pan_limit_degrees)
@@ -64,6 +66,11 @@ func _process(delta):
 			base_y - pan_limit,
 			base_y + pan_limit
 		)
+	
+	for id in _blackout_timers.keys().duplicate():
+		_blackout_timers[id] -= delta
+		if _blackout_timers[id] <= 0.0:
+			_blackout_timers.erase(id)
 
 	var current_target = target_rotations[active_cam]
 	active_cam.rotation.y = lerp(
@@ -98,3 +105,19 @@ func notify_alert_started(target_id: String) -> void:
 
 func notify_alert_stopped(target_id: String) -> void:
 	alert_stopped.emit(target_id)
+
+func blackout_camera(id: String, duration: float) -> void:
+	_blackout_timers[id] = duration
+
+func is_camera_blacked_out(id: String) -> bool:
+	return _blackout_timers.has(id)
+
+func lock_to(id: String) -> void:
+	_locked = true
+	switch_to_camera_by_id(id)   # (สมมติว่ามีฟังก์ชันนี้อยู่แล้วจากที่ CameraLayoutPanel เรียกอยู่)
+
+func unlock() -> void:
+	_locked = false
+
+func is_locked() -> bool:
+	return _locked

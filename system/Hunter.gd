@@ -3,7 +3,7 @@ class_name Hunter
 
 signal stage_changed(instance: Node3D, new_stage: int)
 
-enum Stage { DESPAWNED, SPAWNING, DESPAWNING, HUNT_STAGE_1, HUNT_STAGE_2, HUNT_STAGE_3, COOLDOWN }
+enum Stage { DESPAWNED, SPAWNING, DESPAWNING, HUNT_STAGE_1, HUNT_STAGE_2, HUNT_STAGE_3, HUNT_STAGE_4, COOLDOWN }
 enum Phase { STARING, HUNTING }
 
 const WAKE_TIME: float = 210.0   # GlobalTime Phase 3 — ตาม GDD
@@ -20,6 +20,7 @@ const WAKE_TIME: float = 210.0   # GlobalTime Phase 3 — ตาม GDD
 @export_group("Hunting Phase")
 @export var hunting_stage_1_duration: float = 20.0
 @export var hunting_stage_2_duration: float = 15.0
+@export var hunting_stage_3_duration: float = 12.0
 @export var hunting_countdown_duration: float = 20.0
 @export var hunting_report_window_duration: float = 6.0
 @export var hunting_report_hold_multiplier: float = 1.5
@@ -43,7 +44,8 @@ func _ready() -> void:
 	set_process(true)
 
 func _on_enemy_stage2_reached() -> void:
-	_pending_hunting = true
+	if phase == Phase.STARING:
+		_pending_hunting = true
 
 func _process(delta: float) -> void:
 	if not _has_woken:
@@ -72,21 +74,26 @@ func _process(delta: float) -> void:
 			_timer -= delta
 			if _timer <= 0.0:
 				_enter_stage(Stage.HUNT_STAGE_3)
+		Stage.HUNT_STAGE_3:
+			_timer -= delta
+			if _timer <= 0.0:
+				_enter_stage(Stage.HUNT_STAGE_4)
 		Stage.COOLDOWN:
 			_timer -= delta
 			if _timer <= 0.0:
 				_exit_cooldown()
-		Stage.HUNT_STAGE_3:
+		Stage.HUNT_STAGE_4:
 			pass   # จัดการผ่าน _threat ทั้งหมด
 
 func _exit_cooldown() -> void:
-	if _pending_hunting and phase == Phase.STARING:
-		_pending_hunting = false
+	var should_hunt :=  _pending_hunting and phase == Phase.STARING
+	_pending_hunting = false
+	if should_hunt:
 		phase = Phase.HUNTING
 		_current_hunting_path = hunter_path.get_random_hunting_path()
 		_enter_stage(Stage.HUNT_STAGE_1)
-	else:
-		phase = Phase.STARING   # จบ Hunting cycle (ถ้ามาจาก Hunting) กลับ Staring เสมอ
+	else :
+		phase = Phase.STARING
 		_enter_stage(Stage.SPAWNING)
 
 func _enter_stage(new_stage: Stage) -> void:
@@ -110,6 +117,9 @@ func _enter_stage(new_stage: Stage) -> void:
 			_teleport_to(_current_hunting_path[1])
 			_timer = hunting_stage_2_duration
 		Stage.HUNT_STAGE_3:
+			_teleport_to(_current_hunting_path[2])
+			_timer = hunting_stage_3_duration
+		Stage.HUNT_STAGE_4:
 			_teleport_to(hunter_path.hunting_final_point)
 			_start_threat()
 		Stage.COOLDOWN:
@@ -144,14 +154,23 @@ func _on_threat_expired(_t) -> void:
 
 ## Duck-typed hook — เรียกจาก ReportController ตอน raycast โดน
 func try_report() -> bool:
+	if _if_blocked_by_buff():
+		return false
+	
 	match stage:
-		Stage.DESPAWNING, Stage.HUNT_STAGE_1, Stage.HUNT_STAGE_2:
+		Stage.DESPAWNING, Stage.HUNT_STAGE_1, Stage.HUNT_STAGE_2, Stage.HUNT_STAGE_3:
 			_enter_stage(Stage.COOLDOWN)
 			return true
-		Stage.HUNT_STAGE_3:
+		Stage.HUNT_STAGE_4:
 			return _threat.try_report() if _threat else false
 		_:
 			return false
+
+func _if_blocked_by_buff() -> bool:
+	for instance in EneAnoSpawnManager.get_active_instances().values():
+		if "blocks_hunter_report" in instance and instance.blocks_hunter_report:
+			return true
+	return false
 
 func get_threat() -> GameOverThreat:
 	return _threat

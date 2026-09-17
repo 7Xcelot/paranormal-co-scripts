@@ -16,6 +16,15 @@ const PHASE_THRESHOLDS := {
 const ENCOUNTER_WINDOW_START: float = 550.0
 const ENCOUNTER_WINDOW_END: float = 740.0
 
+const CLOCK_TABLE := [
+	{"start": 0.0,    "label": "11 PM"},
+	{"start": 135.0,  "label": "00 PM"},
+	{"start": 275.0,  "label": "01 PM"},
+	{"start": 420.0,  "label": "02 PM"},
+	{"start": 570.0,  "label": "03 PM"},
+	{"start": 725.0,  "label": "04 PM"},
+]
+
 # ตาราง Hour สำหรับ UI นาฬิกา (11PM - 5AM)
 const HOUR_TABLE := [
 	{"hour": 1, "start": 0.0,   "end": 135.0},
@@ -87,6 +96,15 @@ func _check_encounter_window() -> void:
 	elif not should_be_active and is_encounter_window_active:
 		is_encounter_window_active = false
 		encounter_window_ended.emit()
+
+func get_clock_display() -> String:
+	var label: String = CLOCK_TABLE[0].label
+	for row in CLOCK_TABLE:
+		if elapsed_time >= row.start:
+			label = row.label
+		else:
+			break
+	return label
 
 func start_timer() -> void:
 	is_running = true

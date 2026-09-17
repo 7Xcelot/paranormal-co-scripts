@@ -8,6 +8,8 @@ class_name LevelConfig
 @export var ene_ano_whitelist: Array[String] = []
 @export var ene_ano_capacity: int = 3
 
+@export var case_date_label: String = ""   # เช่น "Friday 12-2021"
+@export var case_no: String = ""           # เช่น "N103"
 ## เพิ่มใหม่ — ตัว EneAnoSpawnManager (autoload) เป็น script-only autoload
 ## ไม่มี .tscn ของตัวเอง จึงไม่มีที่เก็บ reference กลับไปยัง node ในฉากได้เอง
 ## ต้อง inject เข้าไปตรงนี้ตอน Level _ready() แทน
@@ -16,6 +18,7 @@ class_name LevelConfig
 
 func _ready() -> void:
 	_wire_ene_ano_spawner()
+	add_to_group("level_config")
 
 	ObjAnoSpawnManager.load_level_config(level_id)
 	EneAnoSpawnManager.load_level_config(level_id, ene_ano_whitelist, ene_ano_capacity)
