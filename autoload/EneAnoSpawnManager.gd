@@ -2,9 +2,12 @@ extends Node
 # Autoload: "EneAnoSpawnManager" (แยกจาก ObjAnoSpawnManager แล้ว)
 
 ## Check -> Selective -> Time&Cooldown state machine ตาม GDD (Entity_Type_Anomaly.md)
+## หมายเหตุ: ไม่มี EneAno base class แล้ว (แยกเป็น EneAnoAttack / EneAnoBuff อิสระ)
+## instance ทุกจุดในไฟล์นี้จึงเป็น dynamic type — เรียกผ่าน has_method() แบบ duck-typing
 
-signal ene_ano_spawned(instance: EneAno)
+signal ene_ano_spawned(instance)
 signal ene_ano_returned(entity_name: String)
+signal any_stage2_reached
 
 enum SpawnStage { SLEEPING, CHECK, SELECTIVE, TIME_AND_COOLDOWN }
 
@@ -18,7 +21,7 @@ var ene_ano_whitelist: Array[String] = []     # entity_key เช่น "Attack/
 var ene_ano_capacity: int = 0
 
 var active_ene_ano_ids: Array[String] = []    # entity_key ที่ active อยู่ตอนนี้ (กันเลือกซ้ำ)
-var _active_instances: Dictionary = {}        # entity_key -> EneAno instance
+var _active_instances: Dictionary = {}        # entity_key -> instance (EneAnoAttack หรือ EneAnoBuff)
 
 var _stage: SpawnStage = SpawnStage.SLEEPING
 var _has_woken: bool = false
@@ -34,7 +37,7 @@ func load_level_config(new_level_id: int, whitelist: Array[String], new_capacity
 	_active_instances.clear()
 	_stage = SpawnStage.SLEEPING
 	_has_woken = false
-	set_process(false)
+	set_process(true)
 	print("EneAnoSpawnManager: Level Load %d (whitelist: %s, capacity: %d)" % [level_id, ene_ano_whitelist, ene_ano_capacity])
 
 func _process(delta: float) -> void:
@@ -101,18 +104,25 @@ func _do_spawn(entity_key: String) -> void:
 		push_error("EneAnoSpawnManager: spawner ยังไม่ได้ตั้งค่า")
 		return
 	var node_point: Node3D = node_points.pick_random() if not node_points.is_empty() else null
-	var instance := spawner.spawn_entity(entity_key, node_point)
-	if instance == null:
-		# spawn ไม่สำเร็จ (เช่น entity_key ผิด) — คืน reservation แล้วลองใหม่รอบหน้า
+	var instance = spawner.spawn_entity(entity_key, node_point)
+	if instance == null or not instance.has_method("activate"):
+		# spawn ไม่สำเร็จ (เช่น entity_key ผิด หรือไม่ใช่ EneAno entity) — คืน reservation แล้วลองใหม่รอบหน้า
 		active_ene_ano_ids.erase(entity_key)
 		return
 	_active_instances[entity_key] = instance
 	instance.returned_to_pool.connect(_on_instance_returned.bind(entity_key))
+	instance.stage_changed.connect(_on_watched_stage_changed)
 	instance.activate()
 	ene_ano_spawned.emit(instance)
+	print("[Sec %d] EneAno Spawn: %s | Active %d/%d" % [
+		GlobalTimeManager.get_current_second(),
+		entity_key,
+		active_ene_ano_ids.size(),
+		ene_ano_capacity
+	])
 
-func _on_instance_returned(entity_key: String) -> void:
-	var instance: EneAno = _active_instances.get(entity_key)
+func _on_instance_returned(_instance, entity_key: String) -> void:
+	var instance = _active_instances.get(entity_key)
 	if instance:
 		instance.queue_free()
 	_active_instances.erase(entity_key)
@@ -129,3 +139,10 @@ func reset() -> void:
 	_stage = SpawnStage.SLEEPING
 	_has_woken = false
 	set_process(false)
+
+func get_active_instances() -> Dictionary:
+	return _active_instances.duplicate()
+
+func _on_watched_stage_changed(_instance, new_stage: int) -> void:
+	if new_stage == 2:
+		any_stage2_reached.emit()

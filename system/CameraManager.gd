@@ -3,10 +3,13 @@ class_name CameraManager
 
 @export var pan_speed: float = 2.0
 @export var smooth_factor: float = 10.0
-@export var pan_limit_degrees: float = 20.0
+@export var pan_limit_degrees: float = 11.5
+@export var camera_fov: float = 47.5
 @export var visibility_config: LevelVisibilityConfig
 
 signal camera_switched(camera_id: String, camera: Camera3D)
+signal alert_started(target_id: String)
+signal alert_stopped(target_id: String)
 
 var pan_limit: float
 var cameras: Array[Camera3D] = []
@@ -14,13 +17,16 @@ var camera_lookup: Dictionary = {}      # { "1": Camera3D, "2": Camera3D, "3": C
 var base_rotations: Dictionary = {}
 var target_rotations: Dictionary = {}
 var current_camera_id: String = ""
-
+var _blackout_timers: Dictionary = {}
+var _locked: bool = false
 
 func _ready():
 	pan_limit = deg_to_rad(pan_limit_degrees)
 
 	for child in get_children():
 		if child is Camera3D:
+			child.fov = camera_fov
+			
 			cameras.append(child)
 			base_rotations[child] = child.rotation.y
 			target_rotations[child] = child.rotation.y
@@ -35,13 +41,11 @@ func _ready():
 	else:
 		push_warning("CameraManager: ไม่พบ Camera3D ในฉากนี้เลย")
 
-
 func _extract_id(node_name: String) -> String:
 	var regex = RegEx.new()
 	regex.compile("\\d+$") # จับตัวเลขท้ายสตริง
 	var result = regex.search(node_name)
 	return result.get_string() if result else node_name
-
 
 func _process(delta):
 	if cameras.is_empty() or not camera_lookup.has(current_camera_id):
@@ -62,6 +66,11 @@ func _process(delta):
 			base_y - pan_limit,
 			base_y + pan_limit
 		)
+	
+	for id in _blackout_timers.keys().duplicate():
+		_blackout_timers[id] -= delta
+		if _blackout_timers[id] <= 0.0:
+			_blackout_timers.erase(id)
 
 	var current_target = target_rotations[active_cam]
 	active_cam.rotation.y = lerp(
@@ -69,7 +78,6 @@ func _process(delta):
 		current_target,
 		1.0 - exp(-smooth_factor * delta)
 	)
-
 
 func switch_to_camera_by_id(cam_id: String) -> void:
 	if not camera_lookup.has(cam_id):
@@ -86,10 +94,30 @@ func switch_to_camera_by_id(cam_id: String) -> void:
 	new_cam.current = true
 	camera_switched.emit(cam_id, new_cam)
 
-
 func get_current_camera() -> Camera3D:
 	return camera_lookup.get(current_camera_id, null)
 
-
 func get_all_camera_ids() -> Array:
 	return camera_lookup.keys()
+
+func notify_alert_started(target_id: String) -> void:
+	alert_started.emit(target_id)
+
+func notify_alert_stopped(target_id: String) -> void:
+	alert_stopped.emit(target_id)
+
+func blackout_camera(id: String, duration: float) -> void:
+	_blackout_timers[id] = duration
+
+func is_camera_blacked_out(id: String) -> bool:
+	return _blackout_timers.has(id)
+
+func lock_to(id: String) -> void:
+	_locked = true
+	switch_to_camera_by_id(id)   # (สมมติว่ามีฟังก์ชันนี้อยู่แล้วจากที่ CameraLayoutPanel เรียกอยู่)
+
+func unlock() -> void:
+	_locked = false
+
+func is_locked() -> bool:
+	return _locked

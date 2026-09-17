@@ -16,6 +16,15 @@ const PHASE_THRESHOLDS := {
 const ENCOUNTER_WINDOW_START: float = 550.0
 const ENCOUNTER_WINDOW_END: float = 740.0
 
+const CLOCK_TABLE := [
+	{"start": 0.0,    "label": "11 PM"},
+	{"start": 135.0,  "label": "00 PM"},
+	{"start": 275.0,  "label": "01 PM"},
+	{"start": 420.0,  "label": "02 PM"},
+	{"start": 570.0,  "label": "03 PM"},
+	{"start": 725.0,  "label": "04 PM"},
+]
+
 # ตาราง Hour สำหรับ UI นาฬิกา (11PM - 5AM)
 const HOUR_TABLE := [
 	{"hour": 1, "start": 0.0,   "end": 135.0},
@@ -42,24 +51,19 @@ var is_encounter_window_active: bool = false
 
 var _last_whole_second: int = -1
 
-
 func _process(delta: float) -> void:
 	if not is_running:
 		return
-
 	elapsed_time += delta
-
 	if elapsed_time >= LEVEL_DURATION:
 		elapsed_time = LEVEL_DURATION
 		is_running = false
 		level_time_ended.emit()
 		return
-
 	_check_second_tick()
 	_check_phase()
 	_check_hour()
 	_check_encounter_window()
-
 
 func _check_second_tick() -> void:
 	var whole_second := int(elapsed_time)
@@ -67,17 +71,14 @@ func _check_second_tick() -> void:
 		_last_whole_second = whole_second
 		second_tick.emit(whole_second)
 
-
 func _check_phase() -> void:
 	var new_phase := current_phase
 	for phase_num in PHASE_THRESHOLDS.keys():
 		if elapsed_time >= PHASE_THRESHOLDS[phase_num]:
 			new_phase = phase_num
-
 	if new_phase != current_phase:
 		current_phase = new_phase
 		phase_changed.emit(current_phase)
-
 
 func _check_hour() -> void:
 	for entry in HOUR_TABLE:
@@ -87,10 +88,8 @@ func _check_hour() -> void:
 				hour_changed.emit(current_hour)
 			return
 
-
 func _check_encounter_window() -> void:
 	var should_be_active: bool = elapsed_time >= ENCOUNTER_WINDOW_START and elapsed_time < ENCOUNTER_WINDOW_END
-
 	if should_be_active and not is_encounter_window_active:
 		is_encounter_window_active = true
 		encounter_window_started.emit()
@@ -98,14 +97,20 @@ func _check_encounter_window() -> void:
 		is_encounter_window_active = false
 		encounter_window_ended.emit()
 
+func get_clock_display() -> String:
+	var label: String = CLOCK_TABLE[0].label
+	for row in CLOCK_TABLE:
+		if elapsed_time >= row.start:
+			label = row.label
+		else:
+			break
+	return label
 
 func start_timer() -> void:
 	is_running = true
 
-
 func pause_timer() -> void:
 	is_running = false
-
 
 func reset_timer() -> void:
 	elapsed_time = 0.0
@@ -115,6 +120,6 @@ func reset_timer() -> void:
 	is_encounter_window_active = false
 	_last_whole_second = -1
 
-
 func get_current_second() -> int:
 	return int(elapsed_time)
+	

@@ -1,22 +1,27 @@
-extends TextureRect
-class_name  CameraDisplay
+extends Control
 
-@export var camera_viewport: SubViewport
+@onready var cursor = $BlinkingCursor
+@onready var blink_timer = $BlinkingCursor/BlinkTimer
+
+var cursor_offset = Vector2(-20, 0)
 
 func _ready() -> void:
-	camera_viewport.physics_object_picking = true
-	mouse_filter = Control.MOUSE_FILTER_STOP
-	resized.connect(_sync_viewport_size)
-	_sync_viewport_size()
-	
-func _sync_viewport_size() -> void:
-	if size.x <= 0 or size.y <= 0:
-		return
-	camera_viewport.size = Vector2i(size)
-	
-func _gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton or event is InputEventMouseMotion:
-		var scale_factor: Vector2 = Vector2(camera_viewport.size) / size
-		var mapped_event = event.duplicate()
-		mapped_event.position = event.position * scale_factor
-		camera_viewport.push_input(mapped_event)
+	blink_timer.timeout.connect(_on_blink_timer_timeout)
+	_bind_cursor_to_all_buttons(self)
+
+func _bind_cursor_to_all_buttons(current_node: Node) -> void:
+	for child in  current_node.get_children():
+		if child is Button:
+			child.mouse_entered.connect(child.grab_focus())
+			child.focus_entered.connect(_on_button_focused.bind(child))
+			
+		if child.get_child_count() > 0:
+			_bind_cursor_to_all_buttons(child)
+
+func _on_button_focused(button: Button) -> void:
+	cursor.global_position = button.global_position + cursor_offset
+	cursor.visible = true
+	blink_timer.start()
+
+func _on_blink_timer_timeout() -> void:
+	cursor.visible = not cursor.visible
