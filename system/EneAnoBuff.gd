@@ -29,6 +29,8 @@ func activate() -> void:
 	set_process(true)
 
 func _process(delta: float) -> void:
+	if not GlobalTimeManager.is_running:
+		return
 	match stage:
 		Stage.STAGE_1:
 			_timer -= delta
@@ -75,9 +77,11 @@ func try_report() -> bool:
 	match stage:
 		Stage.STAGE_1, Stage.STAGE_2:
 			_enter_stage(Stage.COOLDOWN)
+			ReportManager.report("ene_ano_b", enemy_name)
 			return true
 		Stage.STAGE_3:
 			blocks_hunter_report = false
+			ReportManager.report("ene_ano_b", enemy_name)
 			_return_to_pool()
 			return true
 		_:

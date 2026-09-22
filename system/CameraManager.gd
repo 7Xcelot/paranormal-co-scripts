@@ -107,6 +107,8 @@ func notify_alert_stopped(target_id: String) -> void:
 	alert_stopped.emit(target_id)
 
 func blackout_camera(id: String, duration: float) -> void:
+	print("🔴 blackout_camera ถูกเรียก: id=", id, " duration=", duration)
+	print(get_stack())
 	_blackout_timers[id] = duration
 
 func is_camera_blacked_out(id: String) -> bool:

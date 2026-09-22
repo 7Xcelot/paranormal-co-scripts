@@ -41,6 +41,8 @@ func load_level_config(new_level_id: int, whitelist: Array[String], new_capacity
 	print("EneAnoSpawnManager: Level Load %d (whitelist: %s, capacity: %d)" % [level_id, ene_ano_whitelist, ene_ano_capacity])
 
 func _process(delta: float) -> void:
+	if not GlobalTimeManager.is_running:
+		return
 	if not _has_woken:
 		if GlobalTimeManager.elapsed_time >= WAKE_TIME:
 			_has_woken = true

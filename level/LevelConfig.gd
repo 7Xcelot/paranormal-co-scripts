@@ -10,6 +10,7 @@ class_name LevelConfig
 
 @export var case_date_label: String = ""   # เช่น "Friday 12-2021"
 @export var case_no: String = ""           # เช่น "N103"
+@export var camera_map_layout: CameraMapLayout
 ## เพิ่มใหม่ — ตัว EneAnoSpawnManager (autoload) เป็น script-only autoload
 ## ไม่มี .tscn ของตัวเอง จึงไม่มีที่เก็บ reference กลับไปยัง node ในฉากได้เอง
 ## ต้อง inject เข้าไปตรงนี้ตอน Level _ready() แทน
@@ -24,6 +25,7 @@ func _ready() -> void:
 	EneAnoSpawnManager.load_level_config(level_id, ene_ano_whitelist, ene_ano_capacity)
 	GlobalTimeManager.reset_timer()
 	ReportManager.reset_progress()
+	PointManager.reset()
 	GlobalTimeManager.start_timer()
 
 func _wire_ene_ano_spawner() -> void:

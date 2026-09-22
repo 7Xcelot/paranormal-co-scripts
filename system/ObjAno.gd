@@ -12,7 +12,6 @@ enum AnomalyType { DISAPPEAR, SHIFT, TEXTURE_SWAP, TOGGLE }
 
 @export var anomaly_type: AnomalyType = AnomalyType.DISAPPEAR
 @export var entity_id: String = ""
-@export var score_value: int = 10
 @export var normal_visual: NodePath
 @export var anomaly_visual: NodePath
 @export var normal_material: Material
@@ -94,7 +93,7 @@ func _enter_anomaly() -> void:
 func _enter_cooldown(reported: bool) -> void:
 	if reported:
 		ObjAnoSpawnManager.register_obj_ano_reported()
-		ReportManager.report("obj_ano", entity_id, score_value)
+		ReportManager.report("obj_ano", entity_id)
 	anomaly_reverted.emit(entity_id)
 	current_state = State.COOLDOWN
 	_timer = 0.0
@@ -105,8 +104,8 @@ func _cooldown_duration_for_phase(phase: int) -> float:
 	match phase:
 		1: return 12.0
 		2: return 30.0
-		3: return 45.0
-		5: return 33.0
+		3: return 40.0
+		5: return 30.0
 		_: return 12.0
 
 func _on_timer_finished() -> void:

@@ -36,6 +36,8 @@ func activate() -> void:
 	set_process(true)
 
 func _process(delta: float) -> void:
+	if not GlobalTimeManager.is_running:
+		return
 	match stage:
 		Stage.STAGE_1:
 			_timer -= delta
@@ -89,6 +91,7 @@ func _start_threat() -> void:
 	_threat.start()
 
 func _on_threat_resolved(_t) -> void:
+	ReportManager.report("ene_ano_a", enemy_name)
 	_return_to_pool()
 
 func _on_threat_expired(_t) -> void:
@@ -97,6 +100,7 @@ func _on_threat_expired(_t) -> void:
 func try_report() -> bool:
 	match stage:
 		Stage.STAGE_1, Stage.STAGE_2:
+			ReportManager.report("ene_ano_a", enemy_name)
 			_enter_stage(Stage.COOLDOWN)
 			return true
 		Stage.STAGE_3:

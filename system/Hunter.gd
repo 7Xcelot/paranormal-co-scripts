@@ -48,6 +48,8 @@ func _on_enemy_stage2_reached() -> void:
 		_pending_hunting = true
 
 func _process(delta: float) -> void:
+	if not GlobalTimeManager.is_running:
+		return
 	if not _has_woken:
 		if GlobalTimeManager.elapsed_time >= WAKE_TIME:
 			_has_woken = true
@@ -63,7 +65,7 @@ func _process(delta: float) -> void:
 			_timer -= delta
 			if _timer <= 0.0:
 				if _pending_hunting:
-					_enter_stage(Stage.COOLDOWN)   # ไม่กลับ Spawning ตรงๆ — บังคับผ่าน Cooldown เพื่อสลับ Phase
+					_enter_stage(Stage.COOLDOWN)
 				else:
 					_enter_stage(Stage.SPAWNING)
 		Stage.HUNT_STAGE_1:
@@ -125,7 +127,7 @@ func _enter_stage(new_stage: Stage) -> void:
 		Stage.COOLDOWN:
 			visible = false
 			collision_layer = 0
-			_timer = cooldown_duration
+			_timer = _cooldown_duration_for_phase(GlobalTimeManager.current_phase)
 	stage_changed.emit(self, new_stage)
 
 func _teleport_to(point: Node3D) -> void:
@@ -144,6 +146,7 @@ func _start_threat() -> void:
 	_threat.start()
 
 func _on_threat_resolved(_t) -> void:
+	ReportManager.report("hunter_h", "Hunter")
 	if _threat:
 		_threat.queue_free()
 		_threat = null
@@ -159,6 +162,8 @@ func try_report() -> bool:
 	
 	match stage:
 		Stage.DESPAWNING, Stage.HUNT_STAGE_1, Stage.HUNT_STAGE_2, Stage.HUNT_STAGE_3:
+			var report_type := "hunter_h" if phase == Phase.HUNTING else "hunter_s"
+			ReportManager.report(report_type, "Hunter")
 			_enter_stage(Stage.COOLDOWN)
 			return true
 		Stage.HUNT_STAGE_4:
@@ -177,3 +182,8 @@ func get_threat() -> GameOverThreat:
 
 func get_report_hold_duration() -> float:
 	return _threat.get_report_hold_duration() if _threat else 2.4
+
+func _cooldown_duration_for_phase(global_phase: int) -> float:
+	match global_phase:
+		5: return 31.5
+		_: return cooldown_duration
