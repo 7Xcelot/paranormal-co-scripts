@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://ckugvc33wx6f5"]
+
+[ext_resource type="Script" uid="uid://cwdn518t78b3a" path="res://Assets/Script/system/EneAnoBuff.gd" id="1_p1kd0"]
+[ext_resource type="PackedScene" uid="uid://ia7j5qiswkva" path="res://Assets/Models/Entity/BaseModel1.glb" id="2_d1ko6"]
+[ext_resource type="Script" uid="uid://cq163kd1d4me2" path="res://Assets/Script/system/EneAnoAttack.gd" id="3_gnt4m"]
+[ext_resource type="PackedScene" uid="uid://dbuvqp0fujvin" path="res://Assets/Models/Entity/TPost_Broken.glb" id="4_6bghc"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ru5f0"]
+margin = 0.0
+radius = 0.29
+height = 1.75
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gu8r8"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ru5f0"]
+albedo_color = Color(0.3372549, 0.14509805, 0.40784314, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_gu8r8"]
+material = SubResource("StandardMaterial3D_ru5f0")
+
+[node name="EntityLibrary" type="Node3D" unique_id=373051550]
+
+[node name="Buff" type="Node3D" parent="." unique_id=1176601798]
+
+[node name="The_Krasue" type="Area3D" parent="Buff" unique_id=1089299995]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.7599015, 0, 0)
+script = ExtResource("1_p1kd0")
+enemy_name = "The_Krasue"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Buff/The_Krasue" unique_id=1553423690]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.009485722, 0.88100874, -0.30546075)
+shape = SubResource("CapsuleShape3D_ru5f0")
+
+[node name="model" parent="Buff/The_Krasue" unique_id=996267777 instance=ExtResource("2_d1ko6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.024264336, 4.7683716e-07, -0.24787283)
+
+[node name="Attack" type="Node3D" parent="." unique_id=561203860]
+
+[node name="The_Intruder" type="Area3D" parent="Attack" unique_id=1563278070]
+script = ExtResource("3_gnt4m")
+enemy_name = "The_Intruder"
+target_id = "Intruder_3"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Attack/The_Intruder" unique_id=481599893]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.39719224, 0)
+shape = SubResource("CapsuleShape3D_gu8r8")
+
+[node name="model" parent="Attack/The_Intruder" unique_id=1226832605 instance=ExtResource("4_6bghc")]
+transform = Transform3D(0.47563964, 0, 0, 0, 0.46840775, 0, 0, 0, 0.68684137, -0.012306452, 0, 1.8564095)
+
+[node name="floorMesh" type="MeshInstance3D" parent="." unique_id=134862348]
+transform = Transform3D(7.663979, 0, 0, 0, 1, 0, 0, 0, 3.714915, 0, 0, 0)
+mesh = SubResource("PlaneMesh_gu8r8")

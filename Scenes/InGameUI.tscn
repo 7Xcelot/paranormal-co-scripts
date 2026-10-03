@@ -1,0 +1,509 @@
+[gd_scene format=3 uid="uid://c7y1w53t0hxbn"]
+
+[ext_resource type="Script" uid="uid://bibqlqr085iwr" path="res://Assets/Script/UserInterface/NoSignalCam.gd" id="1_6vv32"]
+[ext_resource type="Script" uid="uid://bunjrvt87swbm" path="res://Assets/Script/UserInterface/PuaseUI.gd" id="1_n24tj"]
+[ext_resource type="Script" uid="uid://b1vxwhnpqcrgs" path="res://Assets/Script/UserInterface/GameOverUI.gd" id="3_dc5xj"]
+[ext_resource type="FontFile" uid="uid://pf82hrthn5xm" path="res://Assets/UI/FONTS/IBMPlexMono-Medium.ttf" id="3_e2hqe"]
+[ext_resource type="FontFile" uid="uid://5u2rmbbu788i" path="res://Assets/UI/FONTS/IBMPlexMono-SemiBold.ttf" id="4_dc5xj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5vinl"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gu8r8"]
+bg_color = Color(0.09803922, 0.09019608, 0.14117648, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ru5f0"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l2bgn"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_13vki"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_txb0i"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_siawa"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7s02y"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gebss"]
+bg_color = Color(0.09803922, 0.09019608, 0.14117648, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dc5xj"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_color = Color(0.8, 0.8, 0.8, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kbyug"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_color = Color(0.8, 0.8, 0.8, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cbf3e"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_color = Color(0.8, 0.8, 0.8, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ql55c"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_color = Color(0.8, 0.8, 0.8, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p0sad"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_color = Color(0.8, 0.8, 0.8, 0)
+
+[node name="InGameUI" type="CanvasLayer" unique_id=189978644]
+
+[node name="NoSignalCam" type="Control" parent="." unique_id=1273088494]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_6vv32")
+
+[node name="ColorRect" type="ColorRect" parent="NoSignalCam" unique_id=1391307682]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.09803922, 0.09019608, 0.14117648, 1)
+
+[node name="Label" type="Label" parent="NoSignalCam" unique_id=1599626984]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("4_dc5xj")
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_5vinl")
+text = "[ No Signel ]"
+
+[node name="InGameUserInterface" type="Control" parent="." unique_id=2112500813]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="InGameUserInterface" unique_id=1550006349]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+metadata/_edit_use_anchors_ = true
+
+[node name="ReferenceRect" type="ReferenceRect" parent="InGameUserInterface/MarginContainer" unique_id=1555863674]
+layout_mode = 2
+mouse_filter = 2
+border_color = Color(1, 1, 1, 1)
+border_width = 2.0
+editor_only = false
+
+[node name="MarginContainer" type="MarginContainer" parent="InGameUserInterface/MarginContainer" unique_id=1281581331]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="InGameUserInterface/MarginContainer/MarginContainer" unique_id=1247061792]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="InfoReadout1" type="Label" parent="InGameUserInterface/MarginContainer/MarginContainer/VBoxContainer" unique_id=892048181]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "#ExampleTest 1"
+
+[node name="InfoReadout2" type="Label" parent="InGameUserInterface/MarginContainer/MarginContainer/VBoxContainer" unique_id=2104116248]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "#ExampleTest 2"
+
+[node name="InfoReadout3" type="Label" parent="InGameUserInterface/MarginContainer/MarginContainer/VBoxContainer" unique_id=1310829317]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "#ExampleTest 3"
+
+[node name="TransitionLayer" type="Control" parent="." unique_id=1499996311]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="FlickerRect" type="ColorRect" parent="TransitionLayer" unique_id=1416066873]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BlurRect" type="Control" parent="TransitionLayer" unique_id=4810502]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="BlurPassH" type="ColorRect" parent="TransitionLayer/BlurRect" unique_id=1366759390]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="BlurPassV" type="ColorRect" parent="TransitionLayer/BlurRect" unique_id=499033181]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="ModalLayer" type="Control" parent="." unique_id=520780052]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="GameOverUI" type="Control" parent="ModalLayer" unique_id=2016743288]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_dc5xj")
+
+[node name="Panel" type="Panel" parent="ModalLayer/GameOverUI" unique_id=1079704003]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_gu8r8")
+
+[node name="MarginContainer" type="MarginContainer" parent="ModalLayer/GameOverUI/Panel" unique_id=1489855229]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="Panel" type="Panel" parent="ModalLayer/GameOverUI/Panel/MarginContainer" unique_id=148271062]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ru5f0")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ModalLayer/GameOverUI/Panel/MarginContainer" unique_id=134796686]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 8
+
+[node name="RetryButton" type="Button" parent="ModalLayer/GameOverUI/Panel/MarginContainer/VBoxContainer" unique_id=1498692998]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_fonts/font = ExtResource("3_e2hqe")
+theme_override_styles/normal = SubResource("StyleBoxFlat_l2bgn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_13vki")
+theme_override_styles/hover = SubResource("StyleBoxFlat_txb0i")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_siawa")
+theme_override_styles/focus = SubResource("StyleBoxFlat_7s02y")
+text = "[Retry]"
+alignment = 0
+
+[node name="MainMenuButton" type="Button" parent="ModalLayer/GameOverUI/Panel/MarginContainer/VBoxContainer" unique_id=2084479521]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_fonts/font = ExtResource("3_e2hqe")
+theme_override_styles/normal = SubResource("StyleBoxFlat_l2bgn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_13vki")
+theme_override_styles/hover = SubResource("StyleBoxFlat_txb0i")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_siawa")
+theme_override_styles/focus = SubResource("StyleBoxFlat_7s02y")
+text = "[Main Menu]"
+alignment = 0
+
+[node name="ExitButton" type="Button" parent="ModalLayer/GameOverUI/Panel/MarginContainer/VBoxContainer" unique_id=1733597781]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_fonts/font = ExtResource("3_e2hqe")
+theme_override_styles/normal = SubResource("StyleBoxFlat_l2bgn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_13vki")
+theme_override_styles/hover = SubResource("StyleBoxFlat_txb0i")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_siawa")
+theme_override_styles/focus = SubResource("StyleBoxFlat_7s02y")
+text = "[Exit]"
+alignment = 0
+
+[node name="title" type="Label" parent="ModalLayer/GameOverUI/Panel" unique_id=1253884859]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -92.0
+offset_bottom = -60.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("4_dc5xj")
+theme_override_font_sizes/font_size = 22
+text = "It's Over"
+horizontal_alignment = 1
+
+[node name="LevelFinish" type="Control" parent="ModalLayer" unique_id=69203430]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="PageSummary" type="Control" parent="ModalLayer/LevelFinish" unique_id=397463277]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel" type="Panel" parent="ModalLayer/LevelFinish/PageSummary" unique_id=2141696536]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_gebss")
+metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="ModalLayer/LevelFinish/PageSummary/Panel" unique_id=954720639]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+metadata/_edit_use_anchors_ = true
+
+[node name="ReferenceRect" type="ReferenceRect" parent="ModalLayer/LevelFinish/PageSummary/Panel/MarginContainer" unique_id=1671681369]
+layout_mode = 2
+border_color = Color(1, 1, 1, 1)
+border_width = 2.0
+editor_only = false
+
+[node name="TopLabel" type="VBoxContainer" parent="ModalLayer/LevelFinish/PageSummary/Panel" unique_id=221024849]
+layout_mode = 0
+offset_left = 50.0
+offset_top = 30.0
+offset_right = 146.0
+offset_bottom = 70.0
+
+[node name="title1" type="Label" parent="ModalLayer/LevelFinish/PageSummary/Panel/TopLabel" unique_id=215680052]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_dc5xj")
+theme_override_font_sizes/font_size = 32
+text = "Paranormal Company Limited"
+
+[node name="title2" type="Label" parent="ModalLayer/LevelFinish/PageSummary/Panel/TopLabel" unique_id=2061624494]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_e2hqe")
+text = "Case Summary Report: Case No. N103-20211204/13 [Using InfoReadout1]"
+
+[node name="title3" type="Label" parent="ModalLayer/LevelFinish/PageSummary/Panel/TopLabel" unique_id=2126059859]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_e2hqe")
+text = "Mission: Status: Successfully Compleated as Contracted"
+
+[node name="space" type="Label" parent="ModalLayer/LevelFinish/PageSummary/Panel/TopLabel" unique_id=831149057]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = " "
+
+[node name="title4" type="Label" parent="ModalLayer/LevelFinish/PageSummary/Panel/TopLabel" unique_id=883218575]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_e2hqe")
+theme_override_font_sizes/font_size = 20
+text = "Wage:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ModalLayer/LevelFinish/PageSummary/Panel" unique_id=816756741]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -352.0
+offset_top = -68.0
+offset_right = -34.0
+offset_bottom = -28.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/separation = 50
+metadata/_edit_use_anchors_ = true
+
+[node name="MainMenuButton" type="Button" parent="ModalLayer/LevelFinish/PageSummary/Panel/HBoxContainer" unique_id=1198703782]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_dc5xj")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_dc5xj")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_kbyug")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cbf3e")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_ql55c")
+theme_override_styles/focus = SubResource("StyleBoxFlat_p0sad")
+text = "[Main Menu]"
+
+[node name="StoreButton" type="Button" parent="ModalLayer/LevelFinish/PageSummary/Panel/HBoxContainer" unique_id=1975656568]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_dc5xj")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_dc5xj")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_kbyug")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cbf3e")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_ql55c")
+theme_override_styles/focus = SubResource("StyleBoxFlat_p0sad")
+text = "[Continue]"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="ModalLayer/LevelFinish/PageSummary/Panel" unique_id=641590196]
+layout_mode = 0
+offset_left = 95.0
+offset_top = 184.0
+offset_right = 1117.0
+offset_bottom = 514.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+theme_override_fonts/normal_font = ExtResource("3_e2hqe")
+text = "Operational Summary:
+	Field personnel and the reporting officer successfully completed the cleansing ritual as scheduled. As a result, the concentration of spiritual energy and the clusters of black mist within the school premises were significantly reduced. The surrounding anomalous atmosphere has also dissipated to a level considered seft.
+
+	Although the spiritual energy is assessed to have not been completely eliminated, it is not expected to pose a serious threat in the short term. Additional information gathered after the completion of the mission revealed that the severity of the anomaly in the area began to increase abnormally following the sudden onset of a severe illness in a male teacher at the school.
+
+	The Analysis Division suspects that the aforementioned anomaly may be directly connected to this teacher. However, as the Company's contractual mission has been completed, the Operations Division has therefore closed the case and forwarded this observation to the school director for further consideration and appropriate action at their discretion."
+fit_content = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Point" type="Label" parent="ModalLayer/LevelFinish/PageSummary/Panel" unique_id=677902798]
+layout_mode = 0
+offset_left = 104.0
+offset_top = 148.0
+offset_right = 256.0
+offset_bottom = 171.0
+theme_override_fonts/font = ExtResource("3_e2hqe")
+text = " [Point]"
+
+[node name="PageStore" type="Control" parent="ModalLayer/LevelFinish" unique_id=1601842984]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PauseUI" type="Control" parent="ModalLayer" unique_id=153755615]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_n24tj")
+
+[node name="MarginContainer" type="MarginContainer" parent="ModalLayer/PauseUI" unique_id=1683619354]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -74.5
+offset_top = -65.5
+offset_right = 74.5
+offset_bottom = 65.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="ButtonList" type="VBoxContainer" parent="ModalLayer/PauseUI/MarginContainer" unique_id=1574520267]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="ModalLayer/PauseUI/MarginContainer/ButtonList" unique_id=1809297335]
+layout_mode = 2
+text = "PAUSE"
+horizontal_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="ModalLayer/PauseUI/MarginContainer/ButtonList" unique_id=310595348]
+layout_mode = 2
+text = "Resume"
+
+[node name="RestartButton" type="Button" parent="ModalLayer/PauseUI/MarginContainer/ButtonList" unique_id=1565850918]
+layout_mode = 2
+text = "Restart"
+
+[node name="QuitButton" type="Button" parent="ModalLayer/PauseUI/MarginContainer/ButtonList" unique_id=1377524693]
+layout_mode = 2
+text = "Return to Title"

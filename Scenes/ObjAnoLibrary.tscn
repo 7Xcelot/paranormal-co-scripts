@@ -1,0 +1,218 @@
+[gd_scene format=3 uid="uid://bpa18xswdhusf"]
+
+[ext_resource type="Script" uid="uid://3qpffcx7tkse" path="res://Assets/Script/system/ObjAno.gd" id="1_v81m5"]
+[ext_resource type="Material" uid="uid://usejtjc6258r" path="res://Assets/Materials/test1.tres" id="2_el4cn"]
+[ext_resource type="Material" uid="uid://xp1jqyynoe7q" path="res://Assets/Materials/test2.tres" id="2_ujkol"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ru5f0"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_53w57"]
+albedo_color = Color(0, 1, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ru5f0"]
+material = SubResource("StandardMaterial3D_53w57")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qkhog"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uxwwy"]
+albedo_color = Color(1, 1, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_53w57"]
+material = SubResource("StandardMaterial3D_uxwwy")
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_kky17"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ru5f0"]
+albedo_color = Color(1, 0.4, 0.5921569, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_gu8r8"]
+material = SubResource("StandardMaterial3D_ru5f0")
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_53w57"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8q8ex"]
+albedo_color = Color(0.45882353, 0.4392157, 0.08627451, 1)
+
+[sub_resource type="TorusMesh" id="TorusMesh_gu8r8"]
+material = SubResource("StandardMaterial3D_8q8ex")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kky17"]
+albedo_color = Color(0.69233304, 0.7797288, 1, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ru5f0"]
+material = SubResource("StandardMaterial3D_kky17")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_srfq6"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_srfq6"]
+albedo_color = Color(0.6666667, 0.3372549, 1, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_gu8r8"]
+material = SubResource("StandardMaterial3D_srfq6")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_qkhog"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qkhog"]
+albedo_color = Color(0, 1, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_ru5f0"]
+material = SubResource("StandardMaterial3D_qkhog")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w6c38"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_qkhog"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_gu8r8"]
+
+[node name="ObjAnoLibrary" type="Node3D" unique_id=1695399177]
+
+[node name="Disappear" type="Node3D" parent="." unique_id=169322055]
+
+[node name="L1A1" type="Area3D" parent="Disappear" unique_id=1182920938]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 25.403606)
+script = ExtResource("1_v81m5")
+normal_visual = NodePath("Normal")
+anomaly_visual = NodePath("Anomaly")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Disappear/L1A1" unique_id=163945155]
+shape = SubResource("BoxShape3D_ru5f0")
+
+[node name="Normal" type="Node3D" parent="Disappear/L1A1" unique_id=193547110]
+visible = false
+
+[node name="Anomaly" type="Node3D" parent="Disappear/L1A1" unique_id=1110012863]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Disappear/L1A1/Anomaly" unique_id=668358315]
+mesh = SubResource("BoxMesh_ru5f0")
+
+[node name="L1A3" type="Area3D" parent="Disappear" unique_id=830275326]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 16.470736)
+script = ExtResource("1_v81m5")
+normal_visual = NodePath("Normal")
+anomaly_visual = NodePath("Anomaly")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Disappear/L1A3" unique_id=1134537250]
+shape = SubResource("BoxShape3D_qkhog")
+
+[node name="Normal" type="Node3D" parent="Disappear/L1A3" unique_id=1966861232]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Disappear/L1A3/Normal" unique_id=1242011737]
+mesh = SubResource("BoxMesh_53w57")
+
+[node name="Anomaly" type="Node3D" parent="Disappear/L1A3" unique_id=1944308530]
+visible = false
+
+[node name="Toggle" type="Node3D" parent="." unique_id=1941458805]
+
+[node name="L1A4" type="Area3D" parent="Toggle" unique_id=670894967]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 13.021946)
+script = ExtResource("1_v81m5")
+anomaly_type = 3
+normal_visual = NodePath("Normal")
+anomaly_visual = NodePath("Anomaly")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Toggle/L1A4" unique_id=1239021496]
+shape = SubResource("CylinderShape3D_kky17")
+
+[node name="Normal" type="Node3D" parent="Toggle/L1A4" unique_id=550980036]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Toggle/L1A4/Normal" unique_id=2132382273]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+mesh = SubResource("CylinderMesh_gu8r8")
+
+[node name="Anomaly" type="Node3D" parent="Toggle/L1A4" unique_id=2104059507]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Toggle/L1A4/Anomaly" unique_id=1499576382]
+mesh = SubResource("CylinderMesh_gu8r8")
+
+[node name="L1A7" type="Area3D" parent="Toggle" unique_id=887871983]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 9.165899)
+script = ExtResource("1_v81m5")
+anomaly_type = 3
+normal_visual = NodePath("Normal")
+anomaly_visual = NodePath("Anomaly")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Toggle/L1A7" unique_id=1825374207]
+transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 0, 0)
+shape = SubResource("CylinderShape3D_53w57")
+
+[node name="Normal" type="Node3D" parent="Toggle/L1A7" unique_id=576727091]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Toggle/L1A7/Normal" unique_id=1790094702]
+transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 0, 0)
+mesh = SubResource("TorusMesh_gu8r8")
+
+[node name="Anomaly" type="Node3D" parent="Toggle/L1A7" unique_id=547626130]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Toggle/L1A7/Anomaly" unique_id=2033043571]
+transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 0, 0)
+mesh = SubResource("CylinderMesh_ru5f0")
+
+[node name="Shift" type="Node3D" parent="." unique_id=1296808772]
+
+[node name="L1A5" type="Area3D" parent="Shift" unique_id=286197770]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.491429)
+script = ExtResource("1_v81m5")
+anomaly_type = 1
+normal_visual = NodePath("Normal")
+anomaly_visual = NodePath("Anomaly")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Shift/L1A5" unique_id=632319998]
+shape = SubResource("CapsuleShape3D_srfq6")
+
+[node name="Normal" type="Node3D" parent="Shift/L1A5" unique_id=82964518]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Shift/L1A5/Normal" unique_id=1632182411]
+mesh = SubResource("CapsuleMesh_gu8r8")
+
+[node name="Anomaly" type="Node3D" parent="Shift/L1A5" unique_id=207268499]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Shift/L1A5/Anomaly" unique_id=1618892533]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2337217, -0.4591174, 1.8357358)
+mesh = SubResource("CapsuleMesh_gu8r8")
+
+[node name="L1A2" type="Area3D" parent="Shift" unique_id=1666833867]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20.719069)
+script = ExtResource("1_v81m5")
+anomaly_type = 1
+normal_visual = NodePath("Normal")
+anomaly_visual = NodePath("Anomaly")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Shift/L1A2" unique_id=1038013972]
+shape = SubResource("SphereShape3D_qkhog")
+
+[node name="Normal" type="Node3D" parent="Shift/L1A2" unique_id=1946104122]
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Shift/L1A2/Normal" unique_id=451084855]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4382243, 1.7915707, 1.9605083)
+mesh = SubResource("SphereMesh_ru5f0")
+
+[node name="Anomaly" type="Node3D" parent="Shift/L1A2" unique_id=1706141614]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Shift/L1A2/Anomaly" unique_id=1528785243]
+mesh = SubResource("SphereMesh_ru5f0")
+
+[node name="TextureSwap" type="Node3D" parent="." unique_id=14727608]
+
+[node name="L1A6" type="Area3D" parent="TextureSwap" unique_id=1750524935]
+script = ExtResource("1_v81m5")
+anomaly_type = 2
+normal_visual = NodePath("Normal/MeshInstance3D")
+normal_material = ExtResource("2_ujkol")
+anomaly_material = ExtResource("2_el4cn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TextureSwap/L1A6" unique_id=921409086]
+shape = SubResource("BoxShape3D_w6c38")
+
+[node name="Normal" type="Node3D" parent="TextureSwap/L1A6" unique_id=2128288572]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TextureSwap/L1A6/Normal" unique_id=1976161023]
+mesh = SubResource("BoxMesh_qkhog")
+surface_material_override/0 = ExtResource("2_el4cn")
+
+[node name="Anomaly" type="Node3D" parent="TextureSwap/L1A6" unique_id=1739165594]
+
+[node name="Floor" type="MeshInstance3D" parent="." unique_id=1798112271]
+transform = Transform3D(28.23751, 0, 0, 0, 1, 0, 0, 0, 28.360054, 0, -0.6548414, 0)
+mesh = SubResource("PlaneMesh_gu8r8")
+metadata/_edit_lock_ = true

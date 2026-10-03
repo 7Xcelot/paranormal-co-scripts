@@ -1,0 +1,142 @@
+extends Node
+# Autoload: "EneAnoSpawnManager" (แยกจาก ObjAnoSpawnManager แล้ว)
+
+## Check -> Selective -> Time&Cooldown state machine ตาม GDD (Entity_Type_Anomaly.md)
+## หมายเหตุ: ไม่มี EneAno base class แล้ว (แยกเป็น EneAnoAttack / EneAnoBuff อิสระ)
+## instance ทุกจุดในไฟล์นี้จึงเป็น dynamic type — เรียกผ่าน has_method() แบบ duck-typing
+
+signal ene_ano_spawned(instance)
+signal ene_ano_returned(entity_name: String)
+signal any_stage2_reached
+
+enum SpawnStage { SLEEPING, CHECK, SELECTIVE, TIME_AND_COOLDOWN }
+
+@export var spawner: EneAnoSpawner            # ตัวที่เขียนไว้ก่อนหน้า
+@export var node_points: Array[Node3D] = []   # NodePoint ที่ใช้สุ่ม/กำหนดตำแหน่ง spawn เริ่มต้น
+
+var level_id: int = 0
+var ene_ano_whitelist: Array[String] = []     # entity_key เช่น "Attack/The_Intruder"
+var ene_ano_capacity: int = 0
+
+var active_ene_ano_ids: Array[String] = []    # entity_key ที่ active อยู่ตอนนี้ (กันเลือกซ้ำ)
+var _active_instances: Dictionary = {}        # entity_key -> instance (EneAnoAttack หรือ EneAnoBuff)
+
+var _stage: SpawnStage = SpawnStage.SLEEPING
+var _has_woken: bool = false
+var _cooldown_timer: float = 0.0
+var _spawn_delay_timer: float = 0.0
+var _pending_key: String = ""
+
+func load_level_config(new_level_id: int, whitelist: Array[String], new_capacity: int) -> void:
+	level_id = new_level_id
+	ene_ano_whitelist = whitelist.duplicate()
+	ene_ano_capacity = new_capacity
+	active_ene_ano_ids.clear()
+	_active_instances.clear()
+	_stage = SpawnStage.SLEEPING
+	_has_woken = false
+	set_process(true)
+	print("EneAnoSpawnManager: Level Load %d (whitelist: %s, capacity: %d)" % [level_id, ene_ano_whitelist, ene_ano_capacity])
+
+func _process(delta: float) -> void:
+	if not GlobalTimeManager.is_running:
+		return
+	if not _has_woken:
+		if GlobalTimeManager.elapsed_time >= GameDefualtConfig.get_value("ene_ano_wake"):
+			_has_woken = true
+			_enter_stage(SpawnStage.CHECK)
+		return
+
+	match _stage:
+		SpawnStage.TIME_AND_COOLDOWN:
+			if _pending_key != "":
+				_spawn_delay_timer -= delta
+				if _spawn_delay_timer <= 0.0:
+					_do_spawn(_pending_key)
+					_pending_key = ""
+					_cooldown_timer = _get_cooldown_duration()
+			else:
+				_cooldown_timer -= delta
+				if _cooldown_timer <= 0.0:
+					_enter_stage(SpawnStage.CHECK)
+
+func _enter_stage(new_stage: SpawnStage) -> void:
+	_stage = new_stage
+	match new_stage:
+		SpawnStage.CHECK:
+			_run_check_stage()
+		SpawnStage.SELECTIVE:
+			_run_selective_stage()
+		SpawnStage.TIME_AND_COOLDOWN:
+			pass  # _process() จัดการต่อเอง
+		SpawnStage.SLEEPING:
+			pass
+
+func _run_check_stage() -> void:
+	if active_ene_ano_ids.size() >= ene_ano_capacity:
+		_stage = SpawnStage.SLEEPING  # รอ _on_instance_returned ปลุกใหม่ ไม่ busy-loop
+		return
+	_enter_stage(SpawnStage.SELECTIVE)
+
+func _run_selective_stage() -> void:
+	var eligible: Array[String] = ene_ano_whitelist.filter(
+		func(key): return key not in active_ene_ano_ids
+	)
+	if eligible.is_empty():
+		_stage = SpawnStage.SLEEPING  # ไม่มีตัวว่างเหลือใน whitelist
+		return
+	_pending_key = eligible.pick_random()
+	active_ene_ano_ids.append(_pending_key)  # จองไว้ตั้งแต่ตอนนี้ กัน Selective รอบถัดไปเลือกซ้ำ
+	_spawn_delay_timer = randf_range(10.0, 20.0)
+	_enter_stage(SpawnStage.TIME_AND_COOLDOWN)
+
+func _get_cooldown_duration() -> float:
+	return GameDefualtConfig.cooldown_for("ene_ano", GlobalTimeManager.current_phase)
+
+func _do_spawn(entity_key: String) -> void:
+	if spawner == null:
+		push_error("EneAnoSpawnManager: spawner ยังไม่ได้ตั้งค่า")
+		return
+	var node_point: Node3D = node_points.pick_random() if not node_points.is_empty() else null
+	var instance = spawner.spawn_entity(entity_key, node_point)
+	if instance == null or not instance.has_method("activate"):
+		# spawn ไม่สำเร็จ (เช่น entity_key ผิด หรือไม่ใช่ EneAno entity) — คืน reservation แล้วลองใหม่รอบหน้า
+		active_ene_ano_ids.erase(entity_key)
+		return
+	_active_instances[entity_key] = instance
+	instance.returned_to_pool.connect(_on_instance_returned.bind(entity_key))
+	instance.stage_changed.connect(_on_watched_stage_changed)
+	instance.activate()
+	ene_ano_spawned.emit(instance)
+	print("[Sec %d] EneAno Spawn: %s | Active %d/%d" % [
+		GlobalTimeManager.get_current_second(),
+		entity_key,
+		active_ene_ano_ids.size(),
+		ene_ano_capacity
+	])
+
+func _on_instance_returned(_instance, entity_key: String) -> void:
+	var instance = _active_instances.get(entity_key)
+	if instance:
+		instance.queue_free()
+	_active_instances.erase(entity_key)
+	active_ene_ano_ids.erase(entity_key)
+	ene_ano_returned.emit(entity_key)
+	if _stage == SpawnStage.SLEEPING and _has_woken:
+		_enter_stage(SpawnStage.CHECK)  # slot ว่างแล้ว เช็คใหม่ทันที
+
+func reset() -> void:
+	for instance in _active_instances.values():
+		instance.queue_free()
+	_active_instances.clear()
+	active_ene_ano_ids.clear()
+	_stage = SpawnStage.SLEEPING
+	_has_woken = false
+	set_process(false)
+
+func get_active_instances() -> Dictionary:
+	return _active_instances.duplicate()
+
+func _on_watched_stage_changed(_instance, new_stage: int) -> void:
+	if new_stage == 2:
+		any_stage2_reached.emit()

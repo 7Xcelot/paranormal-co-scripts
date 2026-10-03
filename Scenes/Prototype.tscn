@@ -1,0 +1,226 @@
+[gd_scene format=3 uid="uid://byib58udp3nv7"]
+
+[ext_resource type="Script" uid="uid://ddhqx0hot21lj" path="res://Assets/Script/level/LevelConfig.gd" id="1_rnipy"]
+[ext_resource type="Script" uid="uid://divveqrwog242" path="res://Assets/Script/system/CameraManager.gd" id="2_bre3q"]
+[ext_resource type="Script" uid="uid://1fi0filjo0bl" path="res://Assets/Script/system/ObjAnoMarker.gd" id="2_rnipy"]
+[ext_resource type="Script" uid="uid://38bcv1jbutbl" path="res://Assets/Script/system/ObjAnoSpawner.gd" id="3_u5vw6"]
+[ext_resource type="Script" uid="uid://b0opblosb8v2t" path="res://Assets/Script/system/CameraDisplay.gd" id="5_7pro1"]
+[ext_resource type="Script" uid="uid://7myc2ywafuas" path="res://Assets/Script/level/LevelVisibilityConfig.gd" id="6_bre3q"]
+[ext_resource type="Script" uid="uid://ce06ncmem5dhd" path="res://Assets/Script/system/CameraLayoutPanal.gd" id="6_rnipy"]
+[ext_resource type="PackedScene" uid="uid://bpa18xswdhusf" path="res://Assets/Scenes/ObjAnoLibrary.tscn" id="8_bre3q"]
+[ext_resource type="Script" uid="uid://cd15ov0fxsjd2" path="res://Assets/Script/test/GameOverThreatTest.gd" id="9_x8n37"]
+[ext_resource type="Script" uid="uid://c03bx1wid5vog" path="res://Assets/Script/system/GameOverThreat.gd" id="10_2yycm"]
+[ext_resource type="Script" uid="uid://bry0quujyg1t7" path="res://Assets/Script/system/EneAnoSpawner.gd" id="11_3sme3"]
+[ext_resource type="PackedScene" uid="uid://ckugvc33wx6f5" path="res://Assets/Scenes/EntityLibrary.tscn" id="12_8cko1"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_53w57"]
+albedo_color = Color(0.6174147, 0.5853698, 0.6270698, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_gu8r8"]
+material = SubResource("StandardMaterial3D_53w57")
+
+[sub_resource type="BoxMesh" id="BoxMesh_uxwwy"]
+size = Vector3(2.3732605, 0.39117432, 26.108576)
+
+[sub_resource type="BoxMesh" id="BoxMesh_kky17"]
+size = Vector3(2.4699402, 3.1557312, 0.57899094)
+
+[sub_resource type="BoxMesh" id="BoxMesh_qkhog"]
+size = Vector3(5.4075484, 5.5668488, 26.084991)
+
+[sub_resource type="Resource" id="Resource_0qiin"]
+script = ExtResource("6_bre3q")
+visibility_map = {
+"4": ["c6", "c7"],
+"6": ["playerpoint"],
+"7": ["football_field", "mission_point"]
+}
+metadata/_custom_type_script = "uid://7myc2ywafuas"
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_ru5f0"]
+viewport_path = NodePath("UI_Layer/Control/CameraViewport")
+
+[node name="L0_Playground" type="Node3D" unique_id=217686787]
+
+[node name="Environment" type="Node3D" parent="." unique_id=529316637]
+
+[node name="LevelMesh" type="Node3D" parent="Environment" unique_id=325790014]
+
+[node name="Island_1" type="Node3D" parent="Environment/LevelMesh" unique_id=1656963700]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.13758206, 1.2415726, 10.027819)
+metadata/_edit_lock_ = true
+
+[node name="floor" type="MeshInstance3D" parent="Environment/LevelMesh/Island_1" unique_id=1484643959]
+transform = Transform3D(23.361696, 0, 0, 0, 1.5948403, 0, 0, 0, 24.325518, -6.9985743, -2.115748, -3.8123002)
+mesh = SubResource("PlaneMesh_gu8r8")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Environment/LevelMesh/Island_1" unique_id=1550721716]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.027077913, 1.2180233, -12.263956)
+mesh = SubResource("BoxMesh_uxwwy")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/LevelMesh/Island_1" unique_id=1217908334]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0037994385, -0.16651917, 0.5405216)
+mesh = SubResource("BoxMesh_kky17")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Environment/LevelMesh/Island_1" unique_id=2027304987]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.7513309, 0.44740415, -12.213774)
+mesh = SubResource("BoxMesh_qkhog")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Environment/LevelMesh/Island_1" unique_id=740171503]
+transform = Transform3D(1.2611641, 0, 0, 0, 1.4146879, 0, 0, 0, 1, 0.27083224, -1.8119206, -12.219887)
+mesh = SubResource("BoxMesh_uxwwy")
+
+[node name="LevelControllers" type="Node" parent="." unique_id=1902526751]
+script = ExtResource("1_rnipy")
+ene_ano_whitelist = Array[String](["Buff/The_Krasue", "Attack/The_Intruder"])
+ene_ano_capacity = 2
+ene_ano_spawner_path = NodePath("../EneObjSpawner")
+
+[node name="Entities" type="Node3D" parent="." unique_id=1624225036]
+
+[node name="ObjAnoMarker" type="Marker3D" parent="Entities" unique_id=1474580171 groups=["obj_ano_markers"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.365566, 0, -6.983609)
+script = ExtResource("2_rnipy")
+anomaly_key = "Disappear/L1A1"
+metadata/_custom_type_script = "uid://1fi0filjo0bl"
+
+[node name="ObjAnoMarker2" type="Marker3D" parent="Entities" unique_id=1845807654 groups=["obj_ano_markers"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.422307, -0.18757308, 4.765285)
+script = ExtResource("2_rnipy")
+anomaly_key = "Disappear/L1A3"
+metadata/_custom_type_script = "uid://1fi0filjo0bl"
+
+[node name="ObjAnoMarker3" type="Marker3D" parent="Entities" unique_id=586414890 groups=["obj_ano_markers"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.844614, -0.37514615, 9.53057)
+script = ExtResource("2_rnipy")
+anomaly_key = "Toggle/L1A7"
+metadata/_custom_type_script = "uid://1fi0filjo0bl"
+
+[node name="ObjAnoMarker4" type="Marker3D" parent="Entities" unique_id=1174220856 groups=["obj_ano_markers"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.051106, -0.18757308, 14.5508995)
+script = ExtResource("2_rnipy")
+anomaly_key = "Toggle/L1A4"
+metadata/_custom_type_script = "uid://1fi0filjo0bl"
+
+[node name="ObjAnoMarker5" type="Marker3D" parent="Entities" unique_id=1085089605 groups=["obj_ano_markers"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.051106, -0.18757308, 20.43192)
+script = ExtResource("2_rnipy")
+anomaly_key = "Shift/L1A2"
+metadata/_custom_type_script = "uid://1fi0filjo0bl"
+
+[node name="ObjAnoMarker6" type="Marker3D" parent="Entities" unique_id=508262022 groups=["obj_ano_markers"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.3447275, -0.18757308, 18.710884)
+script = ExtResource("2_rnipy")
+anomaly_key = "Shift/L1A5"
+metadata/_custom_type_script = "uid://1fi0filjo0bl"
+
+[node name="ObjAnoMarker7" type="Marker3D" parent="Entities" unique_id=1010343316 groups=["obj_ano_markers"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.051106, -0.18757308, 5.864752)
+script = ExtResource("2_rnipy")
+anomaly_key = "TextureSwap/L1A6"
+metadata/_custom_type_script = "uid://1fi0filjo0bl"
+
+[node name="UI_Layer" type="CanvasLayer" parent="." unique_id=1198408607]
+
+[node name="Control" type="Control" parent="UI_Layer" unique_id=727657498]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="CameraViewport" type="SubViewport" parent="UI_Layer/Control" unique_id=1091116028]
+
+[node name="CameraManager" type="Node" parent="UI_Layer/Control/CameraViewport" unique_id=2012368550 groups=["camera_manager"]]
+script = ExtResource("2_bre3q")
+pan_speed = 0.7
+smooth_factor = 3.0
+pan_limit_degrees = 25.0
+visibility_config = SubResource("Resource_0qiin")
+
+[node name="Cam1" type="Camera3D" parent="UI_Layer/Control/CameraViewport/CameraManager" unique_id=716368588]
+transform = Transform3D(-0.82637894, 0, -0.5631144, 0, 1, 0, 0.5631144, 0, -0.82637894, -1.7871163, 1.6235447, -2.0761623)
+
+[node name="Cam2" type="Camera3D" parent="UI_Layer/Control/CameraViewport/CameraManager" unique_id=1142639456]
+transform = Transform3D(-0.44982007, 0.19471772, -0.87163466, 0, 0.97594434, 0.21801986, 0.8931192, 0.098069705, -0.43899935, -17.529053, 1.971344, -6.9650726)
+
+[node name="Cam3" type="Camera3D" parent="UI_Layer/Control/CameraViewport/CameraManager" unique_id=2070963660]
+transform = Transform3D(-0.68287176, 0, -0.73053825, 0, 1, 0, 0.73053825, 0, -0.68287176, -17.660503, 0, 19.616333)
+
+[node name="CameraDisplay" type="TextureRect" parent="UI_Layer/Control" unique_id=417116618 groups=["camera_manager"]]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("ViewportTexture_ru5f0")
+script = ExtResource("5_7pro1")
+metadata/_edit_use_anchors_ = true
+
+[node name="CameraLayoutPanel" type="Control" parent="UI_Layer/Control" unique_id=1750566764 node_paths=PackedStringArray("camera_manager")]
+layout_mode = 1
+anchor_left = 0.9375
+anchor_top = 0.79012346
+anchor_right = 0.9583333
+anchor_bottom = 0.9259259
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("6_rnipy")
+camera_manager = NodePath("../CameraViewport/CameraManager")
+selected_modulate = Color(0, 0.8509804, 0.2, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="Cam1" type="Button" parent="UI_Layer/Control/CameraLayoutPanel" unique_id=954384326]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 60.0
+offset_bottom = 39.0
+text = "Cam1"
+
+[node name="Cam2" type="Button" parent="UI_Layer/Control/CameraLayoutPanel" unique_id=1320388717]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 48.0
+offset_right = 60.0
+offset_bottom = 79.0
+text = "Cam2"
+
+[node name="Cam3" type="Button" parent="UI_Layer/Control/CameraLayoutPanel" unique_id=1924651336]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 88.0
+offset_right = 60.0
+offset_bottom = 119.0
+text = "Cam3"
+
+[node name="ObjAnoSpawner" type="Node" parent="." unique_id=1505034163]
+script = ExtResource("3_u5vw6")
+library_scene = ExtResource("8_bre3q")
+spawn_parent_path = NodePath(".")
+
+[node name="GameOverThreatTest" type="Node" parent="." unique_id=783337789 node_paths=PackedStringArray("game_over_threat")]
+script = ExtResource("9_x8n37")
+game_over_threat = NodePath("../GameOverThreat")
+
+[node name="GameOverThreat" type="Node" parent="." unique_id=627022459]
+script = ExtResource("10_2yycm")
+
+[node name="NodePoint" type="Node3D" parent="." unique_id=335098969]
+
+[node name="N1" type="Marker3D" parent="NodePoint" unique_id=415582791]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.07490775, -5.877408)
+
+[node name="N2" type="Marker3D" parent="NodePoint" unique_id=1794070757]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.958936, 0, 30.288017)
+
+[node name="N3" type="Marker3D" parent="NodePoint" unique_id=2139682178]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.817957, 1.1418889, -3.4062853)
+
+[node name="EneObjSpawner" type="Node" parent="." unique_id=393217471]
+script = ExtResource("11_3sme3")
+library_scene = ExtResource("12_8cko1")
+spawn_parent_path = NodePath("../Entities")

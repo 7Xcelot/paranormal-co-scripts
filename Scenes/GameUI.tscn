@@ -1,0 +1,201 @@
+[gd_scene format=3 uid="uid://emtyo4s34edc"]
+
+[ext_resource type="FontFile" uid="uid://5u2rmbbu788i" path="res://Assets/UI/FONTS/IBMPlexMono-SemiBold.ttf" id="1_1ukeg"]
+[ext_resource type="FontFile" uid="uid://pf82hrthn5xm" path="res://Assets/UI/FONTS/IBMPlexMono-Medium.ttf" id="2_28y4q"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ru5f0"]
+bg_color = Color(0.09803922, 0.09019608, 0.14117648, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gu8r8"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_ru5f0"]
+font = ExtResource("1_1ukeg")
+font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_ts7x6"]
+font = ExtResource("2_28y4q")
+font_size = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_28y4q"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_color = Color(0.8, 0.8, 0.8, 0)
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bvyq2"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_color = Color(0.8, 0.8, 0.8, 0)
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mmnmi"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_color = Color(0.8, 0.8, 0.8, 0)
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_abg3c"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_color = Color(0.8, 0.8, 0.8, 0)
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nbcng"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_color = Color(0.8, 0.8, 0.8, 0)
+corner_detail = 1
+
+[node name="GameUI" type="CanvasLayer" unique_id=218588275]
+
+[node name="Extra" type="Control" parent="." unique_id=790725254]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Option" type="Control" parent="." unique_id=7955575]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="LevelSelection" type="Control" parent="." unique_id=856326084]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MainMenu" type="Control" parent="." unique_id=994999885]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel" type="Panel" parent="MainMenu" unique_id=970047467]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ru5f0")
+metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="MainMenu/Panel" unique_id=1799018672]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel" type="Panel" parent="MainMenu/Panel/MarginContainer" unique_id=729922197]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_gu8r8")
+
+[node name="Title" type="VBoxContainer" parent="MainMenu/Panel" unique_id=2074948938]
+layout_mode = 0
+offset_left = 50.0
+offset_top = 30.0
+offset_right = 828.0
+offset_bottom = 93.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+size_flags_stretch_ratio = 0.0
+metadata/_edit_use_anchors_ = true
+
+[node name="title1" type="Label" parent="MainMenu/Panel/Title" unique_id=2062489820]
+layout_mode = 2
+text = "Paranormal Company Limited"
+label_settings = SubResource("LabelSettings_ru5f0")
+
+[node name="title2" type="Label" parent="MainMenu/Panel/Title" unique_id=264174072]
+layout_mode = 2
+text = "a Paranormal Co.Ltd Anomalies Tracking Software - Copyright reserved exclusively for company employees. ONLY"
+label_settings = SubResource("LabelSettings_ts7x6")
+
+[node name="Actiom" type="VBoxContainer" parent="MainMenu/Panel" unique_id=1307529843]
+layout_mode = 1
+offset_left = 90.0
+offset_top = 130.0
+offset_right = 283.0
+offset_bottom = 312.0
+theme_override_constants/separation = 10
+
+[node name="StartButton" type="Button" parent="MainMenu/Panel/Actiom" unique_id=549942681]
+layout_mode = 2
+theme_override_colors/font_focus_color = Color(0.9364638, 0.89408875, 0, 1)
+theme_override_colors/font_hover_color = Color(0.9372549, 0.89411765, 0, 1)
+theme_override_fonts/font = ExtResource("2_28y4q")
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_28y4q")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bvyq2")
+theme_override_styles/hover = SubResource("StyleBoxFlat_mmnmi")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_abg3c")
+theme_override_styles/focus = SubResource("StyleBoxFlat_nbcng")
+text = "Case Selection"
+alignment = 0
+
+[node name="OptionButton" type="Button" parent="MainMenu/Panel/Actiom" unique_id=1842692194]
+layout_mode = 2
+theme_override_colors/font_focus_color = Color(0.9364638, 0.89408875, 0, 1)
+theme_override_colors/font_hover_color = Color(0.9372549, 0.89411765, 0, 1)
+theme_override_fonts/font = ExtResource("2_28y4q")
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_28y4q")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bvyq2")
+theme_override_styles/hover = SubResource("StyleBoxFlat_mmnmi")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_abg3c")
+theme_override_styles/focus = SubResource("StyleBoxFlat_nbcng")
+text = "Option"
+alignment = 0
+
+[node name="ExtraButton" type="Button" parent="MainMenu/Panel/Actiom" unique_id=2143680139]
+layout_mode = 2
+theme_override_colors/font_focus_color = Color(0.9364638, 0.89408875, 0, 1)
+theme_override_colors/font_hover_color = Color(0.9372549, 0.89411765, 0, 1)
+theme_override_fonts/font = ExtResource("2_28y4q")
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_28y4q")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bvyq2")
+theme_override_styles/hover = SubResource("StyleBoxFlat_mmnmi")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_abg3c")
+theme_override_styles/focus = SubResource("StyleBoxFlat_nbcng")
+text = "Extra"
+alignment = 0
+
+[node name="ExitButton" type="Button" parent="MainMenu/Panel/Actiom" unique_id=1370556479]
+layout_mode = 2
+theme_override_colors/font_focus_color = Color(0.9364638, 0.89408875, 0, 1)
+theme_override_colors/font_hover_color = Color(0.9372549, 0.89411765, 0, 1)
+theme_override_fonts/font = ExtResource("2_28y4q")
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_28y4q")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bvyq2")
+theme_override_styles/hover = SubResource("StyleBoxFlat_mmnmi")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_abg3c")
+theme_override_styles/focus = SubResource("StyleBoxFlat_nbcng")
+text = "Exit"
+alignment = 0
+
+[node name="Intro" type="Control" parent="." unique_id=266829376]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TransitionLayer" type="Control" parent="." unique_id=1620812913]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
