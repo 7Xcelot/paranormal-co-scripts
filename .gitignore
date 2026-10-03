@@ -1,0 +1,38 @@
+# Godot 4+ auto-generated directory
+.godot/
+
+# Godot 3.x auto-generated directory
+.import/
+
+# Imported build, export, and translation binaries
+*.translation
+
+# Mono/C# specific
+.mono/
+data_*/
+mono_project/
+.vs/
+.idea/
+*.csproj
+*.sln
+
+# Godot Exported binaries
+*.apk
+*.aab
+*.a
+*.ar
+*.app
+*.dmg
+*.exe
+*.icns
+*.ipa
+*.iso
+*.jar
+*.msi
+*.o
+*.so
+
+# System/OS generated files
+.DS_Store
+Thumbs.db
+*.tmp
